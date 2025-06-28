@@ -60,7 +60,7 @@
           <div class="popup-section">
             <strong>🕒 Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
 	    <strong></strong> (${relative})<br>
-            <strong><i class="fa-sharp fa-solid fa-gauge"></i>Hız:</strong> ${vehicle.speed} km/h
+            <strong>🚀 Hız:</strong> ${vehicle.speed} km/h
           </div>
           <div class="popup-icons">
             <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}">🔌 USB şarj</div>
