@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5HQGHMMDKB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5HQGHMMDKB');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İETT-ÖHO Araçları Grafiği</title>
+  <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+    .filter-group, .nav { margin: 10px 0; }
+    button, select { margin: 5px; padding: 8px 12px; font-size: 14px; cursor: pointer; }
+    .chart-block { margin-bottom: 80px; }
+    canvas { width: 100% !important; max-width: 1400px; height: 800px !important; display: block; margin: 0 auto; }
+    .summary-table {
+      width: 90%; max-width: 900px; margin: 20px auto;
+      border-collapse: collapse; font-size: 16px;
+    }
+    .summary-table th, .summary-table td {
+      border: 1px solid #ccc; padding: 6px 10px; text-align: left;
+    }
+    .summary-table th { background: #f0f0f0; }
+  </style>
+  <script src="js/grafik.js" defer></script>
+</head>
+<body>
+  <h2>İETT-ÖHO Araçları Grafiği</h2>
+
+  <div class="nav">
+    <a href="liste.html"><button>📋 Liste</button></a>
+  </div>
+
+  <div class="filter-group">
+    <strong>Kapsam:</strong>
+    <button onclick="setScope('all')">Tüm</button>
+    <button onclick="setScope('iett')">İETT</button>
+    <button onclick="setScope('non-iett')">ÖHO</button>
+    <select id="garageFilter" onchange="setGarage(this.value)">
+      <option value="">🚏 Garaj: Tümü</option>
+    </select>
+  </div>
+
+  <div class="filter-group" id="doorFilter" style="display:none">
+    <strong>ÖHO Bölge:</strong>
+    <button onclick="setDoor(null)">Tümü</button>
+    <button onclick="setDoor('A')">A</button>
+    <button onclick="setDoor('B')">B</button>
+    <button onclick="setDoor('C')">C</button>
+    <button onclick="setDoor('D')">D</button>
+    <button onclick="setDoor('E')">E</button>
+  </div>
+
+  <div id="charts">
+    <div class="chart-block"><h3>📊 Model</h3><canvas id="brandChart"></canvas><table class="summary-table" id="brandTable"></table></div>
+    <div class="chart-block"><h3>📅 Model Yılı</h3><canvas id="modelChart"></canvas><table class="summary-table" id="modelTable"></table></div>
+    <div class="chart-block"><h3>🏷️ Marka</h3><canvas id="mainBrandChart"></canvas><table class="summary-table" id="mainBrandTable"></table></div>
+    <div class="chart-block"><h3>🚍 Araç Tipi</h3><canvas id="typeChart"></canvas><table class="summary-table" id="typeTable"></table></div>
+  </div>
+</body>
+</html>

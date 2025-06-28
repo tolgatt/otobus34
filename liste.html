@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5HQGHMMDKB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5HQGHMMDKB');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İETT-ÖHO Araçları Listesi</title>
+  <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f8f8f8;
+      color: #333;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .filter-group, .nav {
+      margin: 10px 0;
+    }
+
+    button, select {
+      margin: 4px;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    table {
+      width: 95%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background: #f0f0f0;
+      font-weight: bold;
+    }
+
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+  <script src="js/liste.js" defer></script>
+</head>
+<body>
+  <h2>İETT-ÖHO Araçları Listesi</h2>
+
+  <div class="nav">
+    <a href="grafik.html"><button>📊 Grafik</button></a>
+    <button onclick="exportXLSX()">📥 XLSX Dışa Aktar</button>
+  </div>
+
+  <div class="filter-group">
+    <label>Model: <select id="brandFilter"><option value="">Tümü</option></select></label>
+    <label>Marka: <select id="mainBrandFilter"><option value="">Tümü</option></select></label>
+    <label>Model Yılı: <select id="yearFilter"><option value="">Tümü</option></select></label>
+    <label>Tip: <select id="typeFilter"><option value="">Tümü</option></select></label>
+    <label>İşletmeci: <select id="opFilter"><option value="">Tümü</option></select></label>
+    <label>İETT/ÖHO: <select id="typeScopeFilter">
+      <option value="">Tümü</option>
+      <option value="iett">İETT</option>
+      <option value="oho">ÖHO</option>
+    </select></label>
+    <label>Garaj: <select id="garageFilter"><option value="">Tümü</option></select></label>
+  </div>
+
+  <div id="status">0 kayıt bulundu.</div>
+
+  <table id="vehicleTable">
+    <thead>
+      <tr>
+        <th>Kapı Kodu</th>
+        <th>Plaka</th>
+        <th>Model Yılı</th>
+        <th>Marka</th>
+        <th>Tip</th>
+        <th>İşletmeci</th>
+        <th>Son Konum</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</body>
+</html>
