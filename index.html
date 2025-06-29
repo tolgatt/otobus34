@@ -15,10 +15,6 @@
   <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
-  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-regular.css"/>
-  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-light.css"/>
-  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/duotone.css"/>
-  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/brands.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
@@ -211,8 +207,8 @@ a {
     </select>
     <label for="update-interval">Güncelleme aralığı (dakika):</label>
     <input type="number" id="update-interval" min="1" max="20" value="5">
-    <button id="update-button">🔄 Otobüsleri güncelle</button>
-    <a href="liste.html?utm_source=harita" target="_blank"><button>📋 Tüm otobüslerin listesi</button></a>
+    <button id="update-button"><i class="fa-sharp fa-solid fa-arrows-rotate fa-spin" style="color: #ffffff;"></i> Otobüsleri güncelle</button>
+    <a href="liste.html?utm_source=harita" target="_blank"><button><i class="fa-sharp fa-solid fa-clipboard-list" style="color: #ffffff;"></i> Tüm otobüslerin listesi</button></a>
   </div>
   <div id="legend">
     <h4>Lejant ve servis durumu</h4>
@@ -228,7 +224,7 @@ a {
     </div>
   </div>
   <div class="toggle-btn" id="toggle-btn" title="Filtre Panelini Aç/Kapat">
-    <img src="ikonlar/menu-burger.svg" alt="Menü">
+    <i class="fa-sharp fa-solid fa-bars" style="color: #ffffff;"></i>
   </div>
 </body>
 </html>
