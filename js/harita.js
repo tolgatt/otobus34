@@ -48,25 +48,25 @@
             <div class="plate">${vehicle.numberPlate}</div>
           </div>
           <div class="popup-section">
-            <strong>📍 Hat:</strong> ${lineCode}<br>
-            <strong>🅿️ Garaj:</strong> ${vehicle.garageName || '—'}<br>
-            <strong>🏢 Şirket:</strong> ${vehicle.operatorType}<br>
+            <strong><i class="fa-sharp fa-solid fa-route"></i> Hat:</strong> ${lineCode}<br>
+            <strong><i class="fa-sharp fa-solid fa-garage"></i> Garaj:</strong> ${vehicle.garageName || '—'}<br>
+            <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}<br>
           </div>
           <div class="popup-section">
-            <strong>🗓 Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
-            <strong>🚌 Tür:</strong> ${vehicle.vehicleType || '-'}<br>
-            <strong>🪑 Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
+            <strong><i class="fa-sharp fa-solid fa-calendar"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
+            <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
+            <strong><i class="fa-sharp fa-solid fa-person-seat"></i> Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
           </div>
           <div class="popup-section">
-            <strong>🕒 Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
+            <strong><i class="fa-sharp fa-solid fa-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
 	    <strong></strong> (${relative})<br>
             <strong><i class="fa-sharp fa-solid fa-gauge"></i> Hız:</strong> ${vehicle.speed} km/h
           </div>
           <div class="popup-icons">
-            <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}">🔌 USB şarj</div>
-            <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}">🛜 İBB Wi-Fi</div>
-            <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}">🚲 Bisiklet aparatı</div>
-            <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}">♿ Engelli erişimi</div>
+            <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i> USB şarj</div>
+            <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i> İBB Wi-Fi</div>
+            <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i> Bisiklet aparatı</div>
+            <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i> Engelli erişimi</div>
           </div>
           <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank">🔗 Detaylı görev bilgisi</a>
           <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank">🔗 Araç İETT</a>
