@@ -53,12 +53,12 @@
             <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}<br>
           </div>
           <div class="popup-section">
-            <strong><i class="fa-sharp fa-solid fa-calendar"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
-            <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
+            <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
+            <strong><i class="fa-sharp fa-solid fa-option"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
             <strong><i class="fa-sharp fa-solid fa-person-seat"></i> Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
           </div>
           <div class="popup-section">
-            <strong><i class="fa-sharp fa-solid fa-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
+            <strong><i class="fa-sharp fa-solid fa-calendar-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
 	    <strong></strong> (${relative})<br>
             <strong><i class="fa-sharp fa-solid fa-gauge"></i> Hız:</strong> ${vehicle.speed} km/h
           </div>
@@ -68,8 +68,8 @@
             <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i> Bisiklet aparatı</div>
             <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i> Engelli erişimi</div>
           </div>
-          <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank">🔗 Detaylı görev bilgisi</a>
-          <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank">🔗 Araç İETT</a>
+          <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Detaylı görev bilgisi</a>
+          <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
         </div>
       `;
     }
