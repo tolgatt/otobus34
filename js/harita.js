@@ -54,7 +54,7 @@
           </div>
           <div class="popup-section">
             <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
-            <strong><i class="fa-sharp fa-solid fa-option"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
+            <strong><i class="fa-sharp fa-solid fa-van-shuttle"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
             <strong><i class="fa-sharp fa-solid fa-person-seat"></i> Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
           </div>
           <div class="popup-section">
