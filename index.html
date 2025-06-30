@@ -52,8 +52,7 @@
     }
 
     #control-container input,
-    #control-container select,
-    #control-container button {
+    #control-container select {
       display: block;
       margin-bottom: 12px;
       width: 100%;
@@ -68,18 +67,6 @@
     #control-container input:focus {
       border-color: #4a90e2;
       outline: none;
-    }
-
-    #control-container button {
-      background-color: #e50f19;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    #control-container button:hover {
-      background-color: #aa0810;
     }
 
     #control-container label {
@@ -180,22 +167,16 @@
       border: none;
     }
 
+    /* ⭐ Yeni eklenen buton-row stilleri */
     .button-row {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .button-row button,
-    .button-row a {
+    .button-like {
       flex: 1 1 calc(33.33% - 10px);
       min-width: 0;
-      text-align: center;
-      margin-bottom: 0;
-    }
-
-    .button-like {
-      display: inline-block;
       text-align: center;
       background-color: #e50f19;
       color: white;
@@ -203,6 +184,9 @@
       border-radius: 8px;
       text-decoration: none;
       font-size: 15px;
+      border: none;
+      cursor: pointer;
+      box-sizing: border-box;
     }
 
     .button-like:hover {
@@ -240,17 +224,15 @@
     <input type="number" id="update-interval" min="1" max="20" value="5">
 
     <div class="button-row">
-      <button id="update-button">
+      <button id="update-button" class="button-like">
         <i class="fa-sharp fa-solid fa-arrows-rotate fa-spin" style="color: #ffffff;"></i>
       </button>
       <a href="liste.html?utm_source=harita" target="_blank" class="button-like">
         <i class="fa-sharp fa-solid fa-clipboard-list" style="color: #ffffff;"></i>
       </a>
-      <button>
       <a href="gecmis.html?utm_source=harita" target="_blank" class="button-like">
         <i class="fa-sharp fa-solid fa-clock-rotate-left" style="color: #ffffff;"></i>
       </a>
-      </button>
     </div>
   </div>
 
