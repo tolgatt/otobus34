@@ -123,7 +123,7 @@
       })
       .catch(err => {
         console.error(err);
-        document.getElementById('loading').innerHTML = 'Otobüs verisi teknik bir hatadan ötürü alınamadı.';
+        document.getElementById('loading').innerHTML = 'Otobüs verisi alınamadı <i class="fa-sharp fa-solid fa-face-sad-tear"></i>';
       });
     }
 
