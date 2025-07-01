@@ -16,9 +16,10 @@
   <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+    body { font-family: "Source Sans 3", sans-serif; padding: 20px; text-align: center; }
     .filter-group, .nav { margin: 10px 0; }
     button, select { margin: 5px; padding: 8px 12px; font-size: 14px; cursor: pointer; }
     .chart-block { margin-bottom: 80px; }
@@ -42,8 +43,8 @@
   </div>
 
   <div class="filter-group">
-    <strong>Kapsam:</strong>
-    <button onclick="setScope('all')">Tüm</button>
+    <strong><i class="fa-sharp fa-solid fa-filters"></i></strong>
+    <button onclick="setScope('all')">Tümü</button>
     <button onclick="setScope('iett')">İETT</button>
     <button onclick="setScope('non-iett')">ÖHO</button>
     <select id="garageFilter" onchange="setGarage(this.value)">
