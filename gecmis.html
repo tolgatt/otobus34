@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5HQGHMMDKB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5HQGHMMDKB');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>İETT Geçmiş Seferler</title>
+  <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: "Source Sans 3", sans-serif; background: #f9fbfd; margin: 0; padding: 20px; color: #333; }
+    h1, h2 { text-align: center; color: #444; }
+    form { max-width: 400px; margin: 0 auto 20px auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    form label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+    form input { width: 100%; padding: 6px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+    form button { width: 100%; margin-top: 15px; padding: 10px; background: #e50f19; color: #fff; border: none; font-size: 16px; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
+    form button:hover { background: #aa0810; }
+    #loading { display: none; text-align: center; margin: 20px; }
+    #loading span { padding:10px 20px; background:#007bff; color:white; border-radius:4px; }
+    #searchInput { max-width: 300px; padding: 8px; margin: 10px auto; display: block; border: 1px solid #ccc; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; max-width: 900px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    th, td { border: 1px solid #eee; padding: 10px; font-size: 13px; cursor: pointer; }
+    th { background-color: #f2f2f2; font-weight: 600; text-align: left; }
+    th i { margin-left: 5px; font-size: 12px; color: #888; }
+    tr:hover { background: #f9f9f9; }
+    @media (max-width: 600px) { form, table { font-size: 14px; } th, td { padding: 8px; } }
+  </style>
+  <script src="js/gecmis.js" defer></script>
+</head>
+<body>
+  <h1>İETT Geçmiş Seferler</h1>
 
+  <form id="filterForm">
+    <label>Tarih:
+      <input type="date" name="tarih" id="tarihInput">
+    </label>
+    <label>Hat: <input type="text" name="hatKoduFilter" placeholder="146, 14B..."></label>
+    <label>Güzergah: <input type="text" name="guzergahKoduFilter" placeholder="146_D, 14B_G_D0..."></label>
+    <label>Kapı no: <input type="text" name="kapiNumaraFilter" placeholder="M2001, C-098..."></label>
+    <label>Görev durumu: <input type="text" name="gorevDurumFilter" placeholder="T, I, YK"></label>
+    <label>Bitiş zamanı: <input type="text" name="bitisZamaniFilter"></label>
+    <label>Düzenlenen başlama zamanı: <input type="text" name="duzenlenenBaslamaZamaniFilter"></label>
+    <button type="submit">Sorgula</button>
+  </form>
+
+  <div id="loading">
+    <span>Yükleniyor...</span>
+  </div>
+
+  <input type="text" id="searchInput" placeholder="Tabloda ara...">
+
+  <h2>Seferler</h2>
+  <table id="results">
+    <thead>
+      <tr>
+        <th data-key="SKAPINUMARA">Kapı no <i class="fa-sharp fa-solid fa-arrow-up-arrow-down"></i></i></th>
+        <th data-key="SHATKODU">Hat <i class="fa-sharp fa-solid fa-arrow-up-arrow-down"></i></th>
+        <th data-key="SGUZERGAHKODU">Güzergah <i class="fa-sharp fa-solid fa-arrow-up-arrow-down"></i></th>
+        <th data-key="SGOREVDURUM">Görev durumu <i class="fa-sharp fa-solid fa-arrow-up-arrow-down"></i></th>
+        <th data-key="DTPLANLANANBASLANGICZAMANI">Başlama zamanı <i class="fa-sharp fa-solid fa-arrow-up-arrow-down"></i></th>
+        <th data-key="DTDUZENLENENBASLANGICZAMANI">Düzenlenen başlama zamanı <i class="fa-sharp fa-solid fa-arrow-up-arrow-down"></i></th>
+        <th data-key="DTBITISZAMANI">Bitiş zamanı <i class="fa-sharp fa-solid fa-arrow-up-arrow-down"></i></i></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</body>
+</html>
