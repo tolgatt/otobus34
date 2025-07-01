@@ -60,7 +60,7 @@
           <div class="popup-section">
             <strong><i class="fa-sharp fa-solid fa-calendar-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
 	    <strong></strong> (${relative})<br>
-            <strong><i class="fa-sharp fa-solid fa-gauge"></i> Hız:</strong> ${vehicle.speed} km/h
+            <strong><i class="fa-sharp fa-solid fa-gauge-high"></i> Hız:</strong> ${vehicle.speed} km/h
           </div>
           <div class="popup-icons">
             <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i> USB şarj</div>
