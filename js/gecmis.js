@@ -58,7 +58,7 @@
         renderTable(tableData);
       } catch (err) {
         console.error(err);
-        alert('Bir hata oluştu. Konsolu kontrol et.');
+        alert('Bir hata oluştu.');
       } finally {
         loading.style.display = 'none';
       }
@@ -69,7 +69,7 @@
       tbody.innerHTML = "";
 
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7">Veri bulunamadı.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7">Veri bulunamadı. <i class="fa-sharp fa-solid fa-face-sad-tear"></i></td></tr>`;
         return;
       }
 
