@@ -14,9 +14,12 @@
   <title>İETT-ÖHO Araçları Listesi</title>
   <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
   <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Source Sans 3", sans-serif;
       padding: 20px;
       background: #f8f8f8;
       color: #333;
@@ -27,7 +30,7 @@
       margin-bottom: 10px;
     }
 
-    .filter-group, .nav {
+    .nav {
       margin: 10px 0;
     }
 
@@ -60,6 +63,57 @@
       margin-top: 10px;
       font-weight: bold;
     }
+    
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      max-width: 900px;
+      margin: 20px auto;
+    }
+
+    .filter-group label {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: #f9f9f9;
+      padding: 8px 12px;
+      margin: 6px;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .filter-group select {
+      margin-top: 5px;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 14px;
+      width: 160px;
+    }
+
+    @media (max-width: 600px) {
+      .filter-group {
+        padding: 5px;
+      }
+
+      .filter-group label {
+        width: 100%;
+        align-items: center;
+      }
+
+      .filter-group select {
+        width: 100%;
+        font-size: 13px;
+      }
+    }
   </style>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
   <script src="js/liste.js" defer></script>
@@ -68,25 +122,39 @@
   <h2>İETT-ÖHO Araçları Listesi</h2>
 
   <div class="nav">
-    <a href="grafik.html"><button>📊 Grafik</button></a>
-    <button onclick="exportXLSX()">📥 XLSX Dışa Aktar</button>
+    <a href="grafik.html"><button><i class="fa-sharp fa-solid fa-chart-pie"></i></button></a>
+    <button onclick="exportXLSX()"><i class="fa-sharp fa-solid fa-download"></i> XLSX</button>
   </div>
 
   <div class="filter-group">
-    <label>Model: <select id="brandFilter"><option value="">Tümü</option></select></label>
-    <label>Marka: <select id="mainBrandFilter"><option value="">Tümü</option></select></label>
-    <label>Model Yılı: <select id="yearFilter"><option value="">Tümü</option></select></label>
-    <label>Tip: <select id="typeFilter"><option value="">Tümü</option></select></label>
-    <label>İşletmeci: <select id="opFilter"><option value="">Tümü</option></select></label>
-    <label>İETT/ÖHO: <select id="typeScopeFilter">
-      <option value="">Tümü</option>
-      <option value="iett">İETT</option>
-      <option value="oho">ÖHO</option>
-    </select></label>
-    <label>Garaj: <select id="garageFilter"><option value="">Tümü</option></select></label>
+    <label>Model:
+      <select id="brandFilter"><option value="">Tümü</option></select>
+    </label>
+    <label>Marka:
+      <select id="mainBrandFilter"><option value="">Tümü</option></select>
+    </label>
+    <label>Model Yılı:
+      <select id="yearFilter"><option value="">Tümü</option></select>
+    </label>
+    <label>Tip:
+      <select id="typeFilter"><option value="">Tümü</option></select>
+    </label>
+    <label>İşletmeci:
+      <select id="opFilter"><option value="">Tümü</option></select>
+    </label>
+    <label>İETT/ÖHO:
+      <select id="typeScopeFilter">
+        <option value="">Tümü</option>
+        <option value="iett">İETT</option>
+        <option value="oho">ÖHO</option>
+      </select>
+    </label>
+    <label>Garaj:
+      <select id="garageFilter"><option value="">Tümü</option></select>
+    </label>
   </div>
 
-  <div id="status">0 kayıt bulundu.</div>
+  <div id="status">0 otobüs bulundu.</div>
 
   <table id="vehicleTable">
     <thead>

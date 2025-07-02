@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5HQGHMMDKB"></script>
@@ -13,9 +14,11 @@
   <title>İETT Araçları</title>
   <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
   <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
   <style>
     body { margin: 0; padding: 0; font-family: 'Source Sans 3', sans-serif; }
@@ -30,59 +33,50 @@
       font-size: 18px;
       z-index: 1000;
     }
+
+    a { text-decoration: none; }
+
     #control-container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1001;
-  background-color: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 280px;
-  width: 90%;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  font-family: 'Source Sans 3', sans-serif;
-}
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1001;
+      background-color: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      max-width: 280px;
+      width: 90%;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      font-family: 'Source Sans 3', sans-serif;
+    }
 
-#control-container input,
-#control-container select,
-#control-container button {
-  display: block;
-  margin-bottom: 12px;
-  width: 100%;
-  padding: 10px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease;
-}
+    #control-container input,
+    #control-container select {
+      display: block;
+      margin-bottom: 12px;
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease;
+    }
 
-#control-container input:focus {
-  border-color: #4a90e2;
-  outline: none;
-}
+    #control-container input:focus {
+      border-color: #4a90e2;
+      outline: none;
+    }
 
-#control-container button {
-  background-color: #e50f19;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+    #control-container label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
 
-#control-container button:hover {
-  background-color: #aa0810;
-}
-
-#control-container label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
     #legend {
       position: absolute;
       bottom: 10px;
@@ -107,38 +101,46 @@
     #legend img {
       vertical-align: middle;
     }
+
     .toggle-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1002;
-  padding: 8px;
-  background-color: white;
-  border-radius: 50%;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1002;
+      padding: 8px;
+      background-color: #e50f19;
+      border-radius: 50%;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
 
-.toggle-btn:hover {
-  background-color: #f0f0f0;
-}
+    .toggle-btn:hover {
+      background-color: #aa0810;
+    }
 
-.toggle-btn img {
-  width: 20px;
-  height: 20px;
-  display: block;
-}
+    .toggle-btn img {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
 
-@media (max-width: 600px) {
-  #control-container {
-    top: auto;
-    bottom: 10px;
-    right: 10px;
-    left: 10px;
-    max-width: none;
-  }
-}
+    @media (max-width: 600px) {
+      #control-container {
+        top: auto;
+        bottom: 60px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+      }
+
+      .popup-container {
+        max-width: 80vw !important;
+        transform-origin: center bottom;
+        transform: scale(0.75);
+      }
+    }
+
     .popup-container {
       font-family: "Source Sans 3", sans-serif;
       font-size: 12px;
@@ -166,10 +168,35 @@
     .popup-link { display: block; text-align: center; padding: 10px; color: #2980b9; text-decoration: none; font-weight: 500; }
     .popup-link:hover { text-decoration: underline; }
     .leaflet-popup-content-wrapper {
-    background: transparent;
-    box-shadow: none;
-    border: none;
-		}
+      background: transparent;
+      box-shadow: none;
+      border: none;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button-like {
+      flex: 1 1 calc(33.33% - 10px);
+      min-width: 0;
+      text-align: center;
+      background-color: #e50f19;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    .button-like:hover {
+      background-color: #aa0810;
+    }
   </style>
   <script src="https://unpkg.com/dayjs@1.11.10/dayjs.min.js"></script>
   <script src="https://unpkg.com/dayjs@1.11.10/plugin/relativeTime.js"></script>
@@ -186,7 +213,7 @@
 </head>
 <body>
   <div id="map"></div>
-  <div id="loading">Otobüsler yükleniyor...</div>
+  <div id="loading"><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i></div>
   <div id="control-container">
     <label for="search">Ara:</label>
     <input type="text" id="search" placeholder="Kapı No veya Plaka Ara">
@@ -200,9 +227,20 @@
     </select>
     <label for="update-interval">Güncelleme aralığı (dakika):</label>
     <input type="number" id="update-interval" min="1" max="20" value="5">
-    <button id="update-button">🔄 Otobüsleri güncelle</button>
-    <a href="liste.html?utm_source=harita" target="_blank"><button>📋 Tüm otobüslerin listesi</button></a>
+
+    <div class="button-row">
+      <button id="update-button" class="button-like">
+        <i class="fa-sharp fa-solid fa-arrows-rotate fa-spin" style="color: #ffffff;"></i>
+      </button>
+      <a href="liste.html?utm_source=harita" target="_blank" class="button-like">
+        <i class="fa-sharp fa-solid fa-clipboard-list" style="color: #ffffff;"></i>
+      </a>
+      <a href="gecmis.html?utm_source=harita" target="_blank" class="button-like">
+        <i class="fa-sharp fa-solid fa-clock-rotate-left" style="color: #ffffff;"></i>
+      </a>
+    </div>
   </div>
+
   <div id="legend">
     <h4>Lejant ve servis durumu</h4>
     <div id="legend-content">
@@ -210,14 +248,14 @@
       <div><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" width="12" height="20"> Metrobüs</div>
       <div><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png" width="12" height="20"> İETT</div>
       <div><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" width="12" height="20"> Adalar</div>
-      <iframe src="https://tumotobusler.betteruptime.com/badge?theme=light" width="180" height="30" frameborder="0" scrolling="no"></iframe>
+      <iframe src="https://otobus34.betteruptime.com/badge?theme=light" width="180" height="30" frameborder="0" scrolling="no"></iframe>
       <div style="margin-top: 10px;">
         <span style="font-size: 12px; color: #666;">Tolga T. (2025)</span>
       </div>
     </div>
   </div>
   <div class="toggle-btn" id="toggle-btn" title="Filtre Panelini Aç/Kapat">
-    <img src="ikonlar/menu-burger.svg" alt="Menü">
+    <img src="ikonlar/otobus.ico">
   </div>
 </body>
 </html>

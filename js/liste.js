@@ -56,7 +56,7 @@
         )
       );
 
-      document.getElementById("status").textContent = `${filtered.length} kayıt bulundu.`;
+      document.getElementById("status").textContent = `${filtered.length} otobüs bulundu.`;
 
       filtered.forEach(v => {
         const tr = document.createElement("tr");

@@ -14,6 +14,8 @@
   <title>İETT Araç Görevleri</title>
   <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
   <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
   <style>
     body {
@@ -27,7 +29,7 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #007bff;
+  background-color: #e50f19;
   color: white;
   border: none;
   border-radius: 10px;
@@ -60,7 +62,7 @@ input, button {
 }
 
 button:not(#yardimButonu) {
-  background-color: #007bff;
+  background-color: #e50f19;
   color: white;
   border: none;
   cursor: pointer;
@@ -68,7 +70,7 @@ button:not(#yardimButonu) {
 }
 
 button:not(#yardimButonu):hover {
-  background-color: #0056b3;
+  background-color: #aa0810;
 }
 
 .task-grid {
@@ -163,7 +165,7 @@ button:not(#yardimButonu):hover {
   <script src="js/gorev.js" defer></script>
 </head>
 <body>
-  <button id="yardimButonu" onclick="toggleYardim()">Yardım</button>
+  <button id="yardimButonu" onclick="toggleYardim()"><i class="fa-sharp fa-solid fa-info" style="color: #ffffff;"></i></button>
   <div id="yardimPaneli">
     <p><strong>Görev Renk Kodları:</strong></p>
     <ul>
