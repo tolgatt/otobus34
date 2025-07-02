@@ -45,7 +45,7 @@
       };
 
       try {
-        const response = await fetch('https://low-goose-47.deno.dev', {
+        const response = await fetch('https://gecmissefer.deno.dev', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(data)
