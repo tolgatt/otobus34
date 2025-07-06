@@ -140,8 +140,6 @@ function addRouteMarkers(hatKodu) {
   .then(data => {
     const matchedMarkers = [];
 
-    markers.clearLayers();
-
     data.forEach(item => {
       const kapino = item.kapino;
       const matchedMarker = allMarkers.find(marker => {
