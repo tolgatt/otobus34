@@ -184,7 +184,7 @@ function addRouteMarkers(hatKodu) {
           </div>
         `;
 
-        matchedMarker.bindPopup(popupHTML);
+        matchedMarker.bindPopup(popupHTML).openPopup();
 
         matchedMarkers.push(matchedMarker);
       } else {
