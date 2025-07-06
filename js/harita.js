@@ -152,14 +152,39 @@ function addRouteMarkers(hatKodu) {
       if (matchedMarker) {
         const vehicle = matchedMarker.feature.properties;
 
-        const originalPopup = getPopupHTML(vehicle);
-        const ekBilgi = `
-          <div class="popup-section">
-            <strong><i class="fa-sharp fa-solid fa-route"></i> Canlı hat:</strong> ${item.hatkodu}<br>
-            <strong><i class="fa-sharp fa-solid fa-arrow-right"></i> Yön:</strong> ${item.yon}<br>
+        const popupHTML = `
+          <div class="popup-container">
+            <div class="popup-header">
+              <div class="door-code">${vehicle.vehicleDoorCode}</div>
+              <div class="plate">${vehicle.numberPlate}</div>
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-route"></i> Canlı hat:</strong> ${item.hatkodu}<br>
+              <strong><i class="fa-sharp fa-solid fa-arrow-right"></i> Yön:</strong> ${item.yon}<br>
+              <strong><i class="fa-sharp fa-solid fa-garage"></i> Garaj:</strong> ${vehicle.garageName || '—'}<br>
+              <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}<br>
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
+              <strong><i class="fa-sharp fa-solid fa-van-shuttle"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
+              <strong><i class="fa-sharp fa-solid fa-person-seat"></i> Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-calendar-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
+              <strong><i class="fa-sharp fa-solid fa-gauge-high"></i> Hız:</strong> ${vehicle.speed} km/h
+            </div>
+            <div class="popup-icons">
+              <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i> USB şarj</div>
+              <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i> İBB Wi-Fi</div>
+              <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i> Bisiklet aparatı</div>
+              <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i> Engelli erişimi</div>
+            </div>
+            <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Detaylı görev bilgisi</a>
+            <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
           </div>
         `;
-        matchedMarker.bindPopup(originalPopup + ekBilgi);
+
+        matchedMarker.bindPopup(popupHTML);
 
         matchedMarkers.push(matchedMarker);
       } else {
