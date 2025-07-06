@@ -132,11 +132,18 @@
         right: 10px;
         left: 10px;
         max-width: none;
+        transform-origin: bottom left;
+        transform: scale(0.75);
       }
 
       .popup-container {
         max-width: 80vw !important;
         transform-origin: center bottom;
+        transform: scale(0.75);
+      }
+
+      #legend {
+        transform-origin: bottom left;
         transform: scale(0.75);
       }
     }
@@ -177,8 +184,13 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      margin-bottom: 10px;
     }
 
+    .button-row:last-child {
+      margin-bottom: 0;
+    }
+    
     .button-like {
       flex: 1 1 calc(33.33% - 10px);
       min-width: 0;
@@ -227,7 +239,13 @@
     </select>
     <label for="update-interval">Güncelleme aralığı (dakika):</label>
     <input type="number" id="update-interval" min="1" max="20" value="5">
-
+    <label for="hat-kodu-input">Anlık hatta göre filtrele:<br>Virgülle ayırarak birden fazla hat yazılabilir.</label>
+    <input type="text" id="hat-kodu-input" placeholder="14B, 146"/>
+    <div class="button-row">
+      <button id="hat-kodu-filtrele-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter" style="color: #ffffff;"></i> Filtrele</button>
+      <button id="filtreyi-kaldir-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter-slash" style="color: #ffffff;"></i> Filtreyi kaldır</button>
+    </div>
+  
     <div class="button-row">
       <button id="update-button" class="button-like">
         <i class="fa-sharp fa-solid fa-arrows-rotate fa-spin" style="color: #ffffff;"></i>
