@@ -130,3 +130,29 @@
         renderTable(sorted);
       });
     });
+
+function copyTask(taskId) {
+  const taskDiv = document.getElementById(taskId);
+  if (!taskDiv) return;
+    
+  const taskHeader = taskDiv.querySelector(".task-header");
+  if (!taskHeader) return;
+
+  let html = taskHeader.innerHTML;
+  html = html.replace(/<br\s*\/?>/gi, '\n');
+
+  const tempElement = document.createElement("div");
+  tempElement.innerHTML = html;
+  const textToCopy = tempElement.innerText;
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    const button = taskDiv.querySelector(".copy-btn");
+    const original = button.textContent;
+    button.textContent = "Kopyalandı!";
+    setTimeout(() => {
+      button.textContent = original;
+    }, 1500);
+  }).catch(err => {
+    console.error("Kopyalama hatası:", err);
+  });
+}
