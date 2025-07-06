@@ -216,21 +216,6 @@ function addRouteMarkers(hatKodu) {
     alert('Canlı sefer verisi alınamadı.');
   });
 }
-    matchedMarkers.forEach(marker => {
-      markers.addLayer(marker);
-    });
-
-    map.addLayer(markers);
-
-    if (matchedMarkers.length) {
-      const group = L.featureGroup(matchedMarkers);
-      map.fitBounds(group.getBounds(), { padding: [50, 50] });
-    }
-  })
-  .catch(err => {
-    console.error('Backend hatası:', err);
-  });
-}
 
 function filterMarkers() {
   const value = document.getElementById('search').value.toLowerCase();
