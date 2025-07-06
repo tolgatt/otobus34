@@ -277,8 +277,12 @@ document.getElementById('hat-kodu-filtrele-btn').addEventListener('click', () =>
 
     markers.clearLayers();
 
-    hatKodlari.forEach(hatKodu => {
-      addRouteMarkers(hatKodu);
+    Promise.all(
+      hatKodlari.map(hatKodu => addRouteMarkers(hatKodu))
+    ).then(() => {
+      console.log('Tüm hat kodları işlendi.');
+    }).catch(err => {
+      console.error('Hat kodları yüklenirken hata oluştu:', err);
     });
 
   } else {
