@@ -163,12 +163,13 @@ function addRouteMarkers(hatKodu) {
               <div class="plate">${vehicle.numberPlate}</div>
             </div>
             <div class="popup-section">
-              <strong><i class="fa-sharp fa-solid fa-route"></i> Canlı hat:</strong> ${item.hatkodu}<br>
+              <strong><i class="fa-sharp fa-solid fa-route"></i> Anlık hat:</strong> ${item.hatkodu}<br>
               <strong><i class="fa-sharp fa-solid fa-compass"></i> Yön:</strong> ${item.yon}<br>
+              <strong><i class="fa-sharp fa-solid fa-arrow-left"></i> Güzergah kodu:</strong> ${item.guzergahkodu}
             </div>
             <div class="popup-section">
               <strong><i class="fa-sharp fa-solid fa-garage"></i> Garaj:</strong> ${vehicle.garageName || '—'}<br>
-              <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}<br>
+              <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}
             </div>
             <div class="popup-section">
               <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
