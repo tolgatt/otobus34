@@ -152,6 +152,12 @@ function addRouteMarkers(hatKodu) {
       if (matchedMarker) {
         const vehicle = matchedMarker.feature.properties;
 
+        const containerClass = !vehicle.garageName ? 'red' : ["Hasanpaşa", "Edirnekapı"].includes(vehicle.garageName) ? 'blue' : ["ADALAR"].includes(vehicle.garageName) ? 'green' : 'black';
+        
+        const lastDateTimeString = `${vehicle.lastLocationDate} ${vehicle.lastLocationTime}`;
+        const parsed = dayjs(lastDateTimeString, "DD-MM-YYYY HH:mm:ss");
+        const relative = parsed.isValid() ? parsed.fromNow() : '-';
+
         const popupHTML = `
           <div class="popup-container ${containerClass}">
             <div class="popup-header">
@@ -165,12 +171,8 @@ function addRouteMarkers(hatKodu) {
               <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}<br>
             </div>
             <div class="popup-section">
-              <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
-              <strong><i class="fa-sharp fa-solid fa-van-shuttle"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
-              <strong><i class="fa-sharp fa-solid fa-person-seat"></i> Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
-            </div>
-            <div class="popup-section">
               <strong><i class="fa-sharp fa-solid fa-calendar-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
+              <strong></strong> (${relative})<br>
               <strong><i class="fa-sharp fa-solid fa-gauge-high"></i> Hız:</strong> ${vehicle.speed} km/h
             </div>
             <div class="popup-icons">
@@ -179,8 +181,8 @@ function addRouteMarkers(hatKodu) {
               <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i> Bisiklet aparatı</div>
               <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i> Engelli erişimi</div>
             </div>
-            <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Detaylı görev bilgisi</a>
-            <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
+              <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Detaylı görev bilgisi</a>
+              <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
           </div>
         `;
 
@@ -195,6 +197,25 @@ function addRouteMarkers(hatKodu) {
       }
     });
 
+    matchedMarkers.forEach(marker => {
+      markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+
+    if (matchedMarkers.length === 1) {
+      map.setView(matchedMarkers[0].getLatLng(), 16, { animate: true });
+    } else if (matchedMarkers.length > 1) {
+      const group = L.featureGroup(matchedMarkers);
+      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    }
+  })
+    
+  .catch(err => {
+    console.error('Backend hatası:', err);
+    alert('Canlı sefer verisi alınamadı.');
+  });
+}
     matchedMarkers.forEach(marker => {
       markers.addLayer(marker);
     });
