@@ -214,6 +214,11 @@ document.getElementById('hat-kodu-filtrele-btn').addEventListener('click', () =>
     alert('Lütfen geçerli bir hat kodu girin.');
   }
 });
-
+document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
+  document.getElementById('hat-kodu-input').value = '';
+  markers.clearLayers();
+  map.removeLayer(markers);
+  updateGeoJSON();
+});
 updateGeoJSON();
 updateIntervalID = setInterval(updateGeoJSON, 300000);
