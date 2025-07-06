@@ -153,7 +153,7 @@ function addRouteMarkers(hatKodu) {
         const vehicle = matchedMarker.feature.properties;
 
         const popupHTML = `
-          <div class="popup-container">
+          <div class="popup-container ${containerClass}">
             <div class="popup-header">
               <div class="door-code">${vehicle.vehicleDoorCode}</div>
               <div class="plate">${vehicle.numberPlate}</div>
