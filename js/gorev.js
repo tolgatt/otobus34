@@ -70,7 +70,7 @@
               (${updatedStartTime} - ${endTime})<br>
               ${stopName} (${stopCode})<br>
               ${task.note ? '<div class="note">' + task.note + '</div>' : ''}
-              <button class="copy-btn" onclick="copyTask('task-${task.taskId}')">Kopyala</button>
+              <button class="copy-btn" onclick="copyTask('task-${task.taskId}')"><i class="fa-sharp fa-solid fa-copy"></i></button>
             </div>
           `;
 
