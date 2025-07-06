@@ -267,9 +267,20 @@ document.getElementById('toggle-btn').addEventListener('click', () => {
   control.style.display = control.style.display === 'block' ? 'none' : 'block';
 });
 document.getElementById('hat-kodu-filtrele-btn').addEventListener('click', () => {
-  const hatKodu = document.getElementById('hat-kodu-input').value.trim();
-  if (hatKodu) {
-    addRouteMarkers(hatKodu);
+  const input = document.getElementById('hat-kodu-input').value.trim();
+  if (input) {
+    const hatKodlari = input.split(',').map(h => h.trim()).filter(h => h !== '');
+    if (hatKodlari.length === 0) {
+      alert('Lütfen geçerli bir hat kodu girin.');
+      return;
+    }
+
+    markers.clearLayers();
+
+    hatKodlari.forEach(hatKodu => {
+      addRouteMarkers(hatKodu);
+    });
+
   } else {
     alert('Lütfen geçerli bir hat kodu girin.');
   }
