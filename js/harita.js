@@ -74,9 +74,9 @@ function getPopupHTML(vehicle, lineCode = '—') {
   `;
 }
 
-function updateGeoJSON() {
+function updateGeoJSON(force = false) {
   const now = Date.now();
-  if (now - lastUpdateTime < 60000) {
+  if (!force && now - lastUpdateTime < 60000) {
     alert('1 dakikada birden fazla güncelleme yapılamaz.');
     return;
   }
@@ -278,7 +278,7 @@ document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
   document.getElementById('hat-kodu-input').value = '';
   markers.clearLayers();
   map.removeLayer(markers);
-  updateGeoJSON();
+  updateGeoJSON(true);
 });
 updateGeoJSON();
 updateIntervalID = setInterval(updateGeoJSON, 300000);
