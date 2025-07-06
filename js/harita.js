@@ -100,6 +100,21 @@ function updateGeoJSON() {
       marker.feature = { properties: vehicle };
       marker.colorClass = colorClass;
       marker.bindPopup(getPopupHTML(vehicle));
+      marker.on('click', () => {
+        fetch(`https://arac.iett.gov.tr/api/task/getCarTasks/${vehicle.vehicleDoorCode}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(taskData => {
+          const lineCode = taskData && taskData.length ? taskData[0].lineCode || '—' : 'Görev yok';
+          marker.bindPopup(getPopupHTML(vehicle, lineCode)).openPopup();
+        })
+        .catch(() => {
+          marker.bindPopup(getPopupHTML(vehicle, 'Hata')).openPopup();
+        });
+      });
+      markers.addLayer(marker);
       allMarkers.push(marker);
     });
 
