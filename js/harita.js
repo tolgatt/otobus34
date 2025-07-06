@@ -102,6 +102,10 @@ function updateGeoJSON() {
       marker.bindPopup(getPopupHTML(vehicle));
       allMarkers.push(marker);
     });
+
+    allMarkers.forEach(marker => markers.addLayer(marker));
+    map.addLayer(markers);
+
     document.getElementById('loading').style.display = 'none';
     lastUpdateTime = Date.now();
   })
