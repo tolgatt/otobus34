@@ -124,7 +124,7 @@ function updateGeoJSON(force = false) {
     document.getElementById('loading').style.display = 'none';
     lastUpdateTime = Date.now();
 
-    filterMarkers();
+    filterMarkers(false);
   })
   .catch(err => {
     console.error(err);
@@ -225,7 +225,7 @@ function addRouteMarkers(hatKodu) {
   });
 }
 
-function filterMarkers() {
+function filterMarkers(shouldAdjustView = true) {
   const value = document.getElementById('search').value.toLowerCase();
   const colorFilter = document.getElementById('color-filter').value;
   markers.clearLayers();
@@ -240,7 +240,8 @@ function filterMarkers() {
       matchedMarkers.push(marker);
     }
   });
-    
+
+  if (shouldAdjustView) {
   if (matchedMarkers.length === 1) {
     map.flyTo(matchedMarkers[0].getLatLng(), 16, { duration: 1.5 });
   } else if (matchedMarkers.length > 1) {
