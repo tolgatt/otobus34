@@ -123,6 +123,8 @@ function updateGeoJSON(force = false) {
 
     document.getElementById('loading').style.display = 'none';
     lastUpdateTime = Date.now();
+
+    filterMarkers();
   })
   .catch(err => {
     console.error(err);
