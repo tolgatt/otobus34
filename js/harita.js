@@ -242,11 +242,12 @@ function filterMarkers(shouldAdjustView = true) {
   });
 
   if (shouldAdjustView) {
-  if (matchedMarkers.length === 1) {
-    map.flyTo(matchedMarkers[0].getLatLng(), 16, { duration: 1.5 });
-  } else if (matchedMarkers.length > 1) {
-    const group = L.featureGroup(matchedMarkers);
-    map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    if (matchedMarkers.length === 1) {
+      map.flyTo(matchedMarkers[0].getLatLng(), 16, { duration: 1.5 });
+    } else if (matchedMarkers.length > 1) {
+      const group = L.featureGroup(matchedMarkers);
+      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    }
   }
 }
 
