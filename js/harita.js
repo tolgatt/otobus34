@@ -64,7 +64,7 @@ function getPopupHTML(vehicle, lineCode = '—') {
       </div>
       <div class="popup-icons">
         <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i></div>
-        <div class="icon-badge><i class="fa-sharp fa-solid fa-fan"></i></div>
+        <div class="icon-badge"><i class="fa-sharp fa-solid fa-fan"></i></div>
         <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i></div>
         <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i></div>
         <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
@@ -186,7 +186,7 @@ function addRouteMarkers(hatKodu) {
             </div>
             <div class="popup-icons">
               <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i></div>
-              <div class="icon-badge><i class="fa-sharp fa-solid fa-fan"></i></div>
+              <div class="icon-badge"><i class="fa-sharp fa-solid fa-fan"></i></div>
               <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i></div>
               <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i></div>
               <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
