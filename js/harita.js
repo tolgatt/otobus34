@@ -284,7 +284,6 @@ document.getElementById('hat-kodu-filtrele-btn').addEventListener('click', () =>
       hatKodlari.map(hatKodu => addRouteMarkers(hatKodu))
     ).then(() => {
       console.log('Tüm hat kodları işlendi.');
-      filterMarkers(false);
     }).catch(err => {
       console.error('Hat kodları yüklenirken hata oluştu:', err);
     });
