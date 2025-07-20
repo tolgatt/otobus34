@@ -9,10 +9,8 @@ let updateIntervalID;
 let lastUpdateTime = 0;
 let routeLayer;
 
-let currentHatKodlari = [];
-
 function getCustomIcon(garage) {
-  let iconUrl, colorClass;
+  let iconUrl;
   if (!garage || garage === "null") {
     iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png';
     colorClass = 'red';
@@ -26,14 +24,14 @@ function getCustomIcon(garage) {
     iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png';
     colorClass = 'black';
   }
-  return { icon: L.icon({
+  return L.icon({
     iconUrl,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  }), colorClass };
+  });
 }
 
 function getPopupHTML(vehicle, lineCode = '—') {
@@ -95,11 +93,12 @@ function updateGeoJSON(force = false) {
       const lat = vehicle.latitude;
       const lon = vehicle.longitude;
       if (!lat || !lon) return;
-      const { icon, colorClass } = getCustomIcon(vehicle.garageName);
-      const marker = L.marker([lat, lon], { icon, opacity: 1 });
+      const marker = L.marker([lat, lon], {
+        icon: getCustomIcon(vehicle.garageName),
+        opacity: 1
+      });
       marker.feature = { properties: vehicle };
       marker.colorClass = colorClass;
-      marker.currentLineCode = ''; 
       marker.bindPopup(getPopupHTML(vehicle));
       marker.on('click', () => {
         fetch(`https://arac.iett.gov.tr/api/task/getCarTasks/${vehicle.vehicleDoorCode}`, {
@@ -109,7 +108,6 @@ function updateGeoJSON(force = false) {
         .then(res => res.json())
         .then(taskData => {
           const lineCode = taskData && taskData.length ? taskData[0].lineCode || '—' : 'Görev yok';
-          marker.currentLineCode = lineCode; 
           marker.bindPopup(getPopupHTML(vehicle, lineCode)).openPopup();
         })
         .catch(() => {
@@ -120,10 +118,13 @@ function updateGeoJSON(force = false) {
       allMarkers.push(marker);
     });
 
+    allMarkers.forEach(marker => markers.addLayer(marker));
+    map.addLayer(markers);
+
     document.getElementById('loading').style.display = 'none';
     lastUpdateTime = Date.now();
 
-    applyAllFilters();
+    filterMarkers(false);
   })
   .catch(err => {
     console.error(err);
@@ -132,59 +133,121 @@ function updateGeoJSON(force = false) {
 }
 
 function addRouteMarkers(hatKodu) {
-  return fetch('https://canlisefer.deno.dev', {
+  fetch('https://canlisefer.deno.dev', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ hat: hatKodu })
   })
   .then(res => res.json())
   .then(data => {
+    const matchedMarkers = [];
+
     data.forEach(item => {
       const kapino = item.kapino;
-      const matchedMarker = allMarkers.find(marker => marker.feature.properties.vehicleDoorCode === kapino);
+      const matchedMarker = allMarkers.find(marker => {
+        const vehicle = marker.feature.properties;
+        return vehicle.vehicleDoorCode === kapino;
+      });
 
       if (matchedMarker) {
-        matchedMarker.currentLineCode = item.hatkodu;
-        matchedMarker.bindPopup(getPopupHTML(matchedMarker.feature.properties, item.hatkodu));
+        const vehicle = matchedMarker.feature.properties;
+
+        const containerClass = !vehicle.garageName ? 'red' : ["Hasanpaşa", "Edirnekapı"].includes(vehicle.garageName) ? 'blue' : ["ADALAR"].includes(vehicle.garageName) ? 'green' : 'black';
+        
+        const lastDateTimeString = `${vehicle.lastLocationDate} ${vehicle.lastLocationTime}`;
+        const parsed = dayjs(lastDateTimeString, "DD-MM-YYYY HH:mm:ss");
+        const relative = parsed.isValid() ? parsed.fromNow() : '-';
+
+        const popupHTML = `
+          <div class="popup-container ${containerClass}">
+            <div class="popup-header">
+              <div class="door-code">${vehicle.vehicleDoorCode}</div>
+              <div class="plate">${vehicle.numberPlate}</div>
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-route"></i> Anlık hat:</strong> ${item.hatkodu}<br>
+              <strong><i class="fa-sharp fa-solid fa-arrow-left"></i> Güzergah:</strong> ${item.guzergahkodu}<br>
+              <strong><i class="fa-sharp fa-solid fa-compass"></i> Yön:</strong> ${item.yon}
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-garage"></i> Garaj:</strong> ${vehicle.garageName || '—'}<br>
+              <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
+              <strong><i class="fa-sharp fa-solid fa-van-shuttle"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
+              <strong><i class="fa-sharp fa-solid fa-person-seat"></i> Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-calendar-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
+              <strong></strong> (${relative})<br>
+              <strong><i class="fa-sharp fa-solid fa-gauge-high"></i> Hız:</strong> ${vehicle.speed} km/h
+            </div>
+            <div class="popup-icons">
+              <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i></div>
+              <div class="icon-badge"><i class="fa-sharp fa-solid fa-fan"></i></div>
+              <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i></div>
+              <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i></div>
+              <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
+            </div>
+              <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Görev bilgisi</a>
+          </div>
+        `;
+
+        matchedMarker.closePopup();
+        matchedMarker.unbindPopup();
+        matchedMarker.off('click');
+        matchedMarker.bindPopup(popupHTML).openPopup();
+
+        matchedMarkers.push(matchedMarker);
+      } else {
+        console.log(`Kapı no eşleşmedi: ${kapino}`);
       }
     });
+
+    matchedMarkers.forEach(marker => {
+      markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+
+    if (matchedMarkers.length === 1) {
+      map.setView(matchedMarkers[0].getLatLng(), 16, { animate: true });
+    } else if (matchedMarkers.length > 1) {
+      const group = L.featureGroup(matchedMarkers);
+      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    }
   })
+    
   .catch(err => {
     console.error('Backend hatası:', err);
     alert('Canlı sefer verisi alınamadı.');
   });
 }
 
-function applyAllFilters(hatKodlari = currentHatKodlari) {
+function filterMarkers(shouldAdjustView = true) {
   const value = document.getElementById('search').value.toLowerCase();
   const colorFilter = document.getElementById('color-filter').value;
-
   markers.clearLayers();
   let matchedMarkers = [];
-
   allMarkers.forEach(marker => {
     const p = marker.feature.properties;
-    
-    const matchesSearch = (value === '') ||
-      (value.startsWith("34") && p.numberPlate.toLowerCase().includes(value)) ||
-      (!value.startsWith("34") && p.vehicleDoorCode.toLowerCase().includes(value));
-    
+    const matchesSearch = (value.startsWith("34") && p.numberPlate.toLowerCase().includes(value)) ||
+                          (!value.startsWith("34") && p.vehicleDoorCode.toLowerCase().includes(value));
     const matchesColor = !colorFilter || marker.colorClass === colorFilter;
-
-    const matchesHatKodu = hatKodlari.length === 0 || hatKodlari.includes(marker.currentLineCode);
-
-    if (matchesSearch && matchesColor && matchesHatKodu) {
+    if (matchesSearch && matchesColor) {
       markers.addLayer(marker);
       matchedMarkers.push(marker);
     }
   });
 
-  // Kamera hareketi
-  if (matchedMarkers.length === 1) {
-    map.flyTo(matchedMarkers[0].getLatLng(), 16, { duration: 1.5 });
-  } else if (matchedMarkers.length > 1) {
-    const group = L.featureGroup(matchedMarkers);
-    map.fitBounds(group.getBounds(), { padding: [50, 50] });
+  if (shouldAdjustView) {
+    if (matchedMarkers.length === 1) {
+      map.flyTo(matchedMarkers[0].getLatLng(), 16, { duration: 1.5 });
+    } else if (matchedMarkers.length > 1) {
+      const group = L.featureGroup(matchedMarkers);
+      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    }
   }
 }
 
@@ -194,9 +257,9 @@ function setUpdateInterval() {
   updateIntervalID = setInterval(updateGeoJSON, minutes * 60000);
 }
 
-document.getElementById('update-button').addEventListener('click', () => updateGeoJSON(true));
-document.getElementById('search').addEventListener('input', () => applyAllFilters());
-document.getElementById('color-filter').addEventListener('input', () => applyAllFilters());
+document.getElementById('update-button').addEventListener('click', updateGeoJSON);
+document.getElementById('search').addEventListener('input', filterMarkers);
+document.getElementById('color-filter').addEventListener('input', filterMarkers);
 document.getElementById('update-interval').addEventListener('input', setUpdateInterval);
 document.getElementById('legend').addEventListener('click', () => {
   const content = document.getElementById('legend-content');
@@ -208,27 +271,32 @@ document.getElementById('toggle-btn').addEventListener('click', () => {
 });
 document.getElementById('hat-kodu-filtrele-btn').addEventListener('click', () => {
   const input = document.getElementById('hat-kodu-input').value.trim();
-  currentHatKodlari = input.split(',').map(h => h.trim()).filter(h => h !== '');
+  if (input) {
+    const hatKodlari = input.split(',').map(h => h.trim()).filter(h => h !== '');
+    if (hatKodlari.length === 0) {
+      alert('Lütfen geçerli bir hat kodu girin.');
+      return;
+    }
 
-  if (currentHatKodlari.length === 0) {
+    markers.clearLayers();
+
+    Promise.all(
+      hatKodlari.map(hatKodu => addRouteMarkers(hatKodu))
+    ).then(() => {
+      console.log('Tüm hat kodları işlendi.');
+    }).catch(err => {
+      console.error('Hat kodları yüklenirken hata oluştu:', err);
+    });
+
+  } else {
     alert('Lütfen geçerli bir hat kodu girin.');
-    return;
   }
-
-  Promise.all(
-    currentHatKodlari.map(hatKodu => addRouteMarkers(hatKodu))
-  ).then(() => {
-    console.log('Tüm hat kodları işlendi.');
-    applyAllFilters();
-  }).catch(err => {
-    console.error('Hat kodları yüklenirken hata oluştu:', err);
-  });
 });
 document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
   document.getElementById('hat-kodu-input').value = '';
-  currentHatKodlari = [];
+  markers.clearLayers();
+  map.removeLayer(markers);
   updateGeoJSON(true);
 });
-
 updateGeoJSON();
 updateIntervalID = setInterval(updateGeoJSON, 300000);
