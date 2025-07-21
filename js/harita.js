@@ -70,7 +70,7 @@ function getPopupHTML(vehicle, lineCode = '—') {
         <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
       </div>
       <div class="popup-links">
-        <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Görev bilgisi</a>
+        <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-list-audio"></i> Görev bilgisi</a>
         <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
       </div>
     </div>
@@ -194,7 +194,7 @@ function addRouteMarkers(hatKodu) {
               <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
             </div>
             <div class="popup-links">
-              <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Görev bilgisi</a>
+              <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-list-radio"></i> Görev bilgisi</a>
               <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
             </div>
           </div>
