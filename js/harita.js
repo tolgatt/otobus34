@@ -63,21 +63,24 @@ function getPopupHTML(vehicle, lineCode = '—') {
         <strong><i class="fa-sharp fa-solid fa-gauge-high"></i> Hız:</strong> ${vehicle.speed} km/h
       </div>
       <div class="popup-icons">
-        <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i> USB şarj</div>
-        <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i> İBB Wi-Fi</div>
-        <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i> Bisiklet aparatı</div>
-        <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i> Engelli erişimi</div>
+        <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i></div>
+        <div class="icon-badge"><i class="fa-sharp fa-solid fa-fan"></i></div>
+        <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i></div>
+        <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i></div>
+        <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
       </div>
-      <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Detaylı görev bilgisi</a>
-      <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
+      <div class="popup-links">
+        <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
+        <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-list-radio"></i> Görev bilgisi</a>
+      </div>
     </div>
   `;
 }
 
 function updateGeoJSON(force = false) {
   const now = Date.now();
-  if (!force && now - lastUpdateTime < 60000) {
-    alert('1 dakikada birden fazla güncelleme yapılamaz.');
+  if (!force && now - lastUpdateTime < 30000) {
+    alert('30 saniyede birden fazla güncelleme yapılamaz.');
     return;
   }
   document.getElementById('loading').style.display = 'block';
@@ -184,13 +187,16 @@ function addRouteMarkers(hatKodu) {
               <strong><i class="fa-sharp fa-solid fa-gauge-high"></i> Hız:</strong> ${vehicle.speed} km/h
             </div>
             <div class="popup-icons">
-              <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i> USB şarj</div>
-              <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i> İBB Wi-Fi</div>
-              <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i> Bisiklet aparatı</div>
-              <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i> Engelli erişimi</div>
+              <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i></div>
+              <div class="icon-badge"><i class="fa-sharp fa-solid fa-fan"></i></div>
+              <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i></div>
+              <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i></div>
+              <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
             </div>
-              <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Detaylı görev bilgisi</a>
+            <div class="popup-links">
               <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
+              <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-list-radio"></i> Görev bilgisi</a>
+            </div>
           </div>
         `;
 

@@ -172,11 +172,31 @@
     .popup-section { padding: 10px; border-bottom: 1px solid #eee; }
     .popup-section:last-child { border-bottom: none; }
     .popup-section strong { display: inline-block; width: 80px; color: #555; }
-    .popup-icons { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; justify-content: flex-start; }
+    .popup-icons { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; justify-content: center; }
     .icon-badge { display: flex; align-items: center; gap: 4px; font-size: 12px; background: #ecf0f1; padding: 4px 8px; border-radius: 12px; color: #2c3e50; }
     .icon-badge.disabled { opacity: 0.4; }
-    .popup-link { display: block; text-align: center; padding: 10px; color: #2980b9; text-decoration: none; font-weight: 500; }
-    .popup-link:hover { text-decoration: underline; }
+    .popup-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      padding: 5px;
+    }
+
+    .popup-link {
+      padding: 5px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 12px;
+      color: #2980b9;
+      font-weight: 500;
+    }
+
+    .popup-link:hover {
+      background: #d0d7de;
+      text-decoration: underline;
+    }
+    
     .leaflet-popup-content-wrapper {
       background: transparent;
       box-shadow: none;
@@ -228,10 +248,10 @@
 </head>
 <body>
   <div id="map"></div>
-  <div id="loading"><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i></div>
+  <div id="loading"><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i> Yükleniyor...</div>
   <div id="control-container">
-    <label for="search">Ara:</label>
-    <input type="text" id="search" placeholder="Kapı No veya Plaka Ara">
+    <label for="search">Kapı no veya plaka ara:</label>
+    <input type="text" id="search" placeholder="C-193, 34NL8224...">
     <label for="color-filter">İşletmeye göre filtrele:</label>
     <select id="color-filter">
       <option value="">Tümü</option>
@@ -241,9 +261,9 @@
       <option value="green">Adalar</option>
     </select>
     <label for="update-interval">Güncelleme aralığı (dakika):</label>
-    <input type="number" id="update-interval" min="1" max="20" value="5">
+    <input type="number" id="update-interval" min="0.5" max="20" value="5">
     <label for="hat-kodu-input">Anlık hatta göre filtrele:<br>Virgülle ayırarak birden fazla hat yazılabilir.</label>
-    <input type="text" id="hat-kodu-input" placeholder="14B, 146"/>
+    <input type="text" id="hat-kodu-input" placeholder="14B, 146..."/>
     <div class="button-row">
       <button id="hat-kodu-filtrele-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter" style="color: #ffffff;"></i> Filtrele</button>
       <button id="filtreyi-kaldir-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter-slash" style="color: #ffffff;"></i> Filtreyi kaldır</button>
@@ -276,7 +296,7 @@
     </div>
   </div>
   <div class="toggle-btn" id="toggle-btn" title="Filtre Panelini Aç/Kapat">
-    <img src="ikonlar/otobus.ico">
+    <img src="ikonlar/otobusseffaf.ico">
   </div>
 </body>
 </html>
