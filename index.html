@@ -233,8 +233,15 @@
       background-color: #aa0810;
     }
     
+    .trafik-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
     .trafik-item {
-      margin-bottom: 10px;
+      flex: 1 1 45%;
     }
 
     .trafik-bar {
@@ -273,6 +280,24 @@
   <div id="map"></div>
   <div id="loading"><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i> Yükleniyor...</div>
   <div id="control-container">
+    <div id="trafik-verisi" style="margin-top: 12px; font-size: 14px;">
+      <strong>Ortalama Trafik İndeksi:</strong>
+      <div class="trafik-row">
+        <div class="trafik-item">
+          <div id="trafik-anadolu-text">Anadolu (…)</div>
+          <div class="trafik-bar">
+            <div id="trafik-anadolu-bar" class="trafik-bar-fill"></div>
+          </div>
+        </div>
+
+        <div class="trafik-item">
+          <div id="trafik-avrupa-text">Avrupa (…)</div>
+          <div class="trafik-bar">
+            <div id="trafik-avrupa-bar" class="trafik-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <label for="search">Kapı no veya plaka ara:</label>
     <input type="text" id="search" placeholder="C-193, 34NL8224...">
     <label for="color-filter">İşletmeye göre filtrele:</label>
