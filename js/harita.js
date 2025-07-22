@@ -307,32 +307,39 @@ document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
 updateGeoJSON();
 updateIntervalID = setInterval(updateGeoJSON, 300000);
 
-function fetchTrafficData() {
+function updateTrafficData() {
   fetch('https://tkmservices.ibb.gov.tr/web/api/TrafficData/v1/TrafficIndex_Sc1_Cont')
-    .then(res => res.text())
-    .then(str => {
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(str, "application/xml");
-      const ti_an = parseInt(xml.getElementsByTagName("TI_An")[0].textContent);
-      const ti_av = parseInt(xml.getElementsByTagName("TI_Av")[0].textContent);
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      const tiAn = data.TI_An ?? '—';
+      const tiAv = data.TI_Av ?? '—';
 
-      updateTrafficBar("trafik-anadolu", ti_an);
-      updateTrafficBar("trafik-avrupa", ti_av);
+      console.log("Anadolu:", tiAn);
+      console.log("Avrupa:", tiAv);
+
+      updateTrafficBar('trafik-anadolu-bar', 'trafik-anadolu-text', tiAn);
+      updateTrafficBar('trafik-avrupa-bar', 'trafik-avrupa-text', tiAv);
     })
     .catch(err => console.error("Trafik verisi alınamadı:", err));
 }
 
-function updateTrafficBar(side, value) {
-  const textEl = document.getElementById(`${side}-text`);
-  const barEl = document.getElementById(`${side}-bar`);
+function updateTrafficBar(barId, textId, value) {
+  const bar = document.getElementById(barId);
+  const text = document.getElementById(textId);
+  const percent = Math.min(parseInt(value), 100);
 
-  const color = `hsl(${(100 - value) * 1.2}, 80%, 45%)`;
-  textEl.innerHTML = `${side === "trafik-anadolu" ? "Anadolu" : "Avrupa"} (%${value})`;
-  textEl.style.color = color;
+  const hue = Math.max(0, 120 - percent * 1.2);
+  const color = `hsl(${hue}, 100%, 40%)`;
 
-  barEl.style.width = `${value}%`;
-  barEl.style.background = `linear-gradient(to right, hsl(${(100 - value) * 1.2}, 80%, 45%), hsl(${(100 - value) * 1.2}, 80%, 45%))`;
+  bar.style.width = percent + "%";
+  bar.style.background = color;
+  bar.textContent = value;
+  bar.style.color = color;
+  text.textContent = text.textContent.split('(')[0] + ` (${value})`;
 }
 
-fetchTrafficData();
-setInterval(fetchTrafficData, 300000);
+updateTrafficData();
+setInterval(updateTrafficData, 600000);
