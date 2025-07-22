@@ -338,6 +338,7 @@ function updateTrafficBar(barId, textId, value) {
   bar.style.background = color;
   bar.textContent = value;
   bar.style.color = color;
+  text.style.color = color;
   text.textContent = text.textContent.split('(')[0] + ` (${value})`;
 }
 
