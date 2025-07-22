@@ -338,8 +338,9 @@ function updateTrafficBar(barId, textId, value) {
   bar.style.background = color;
   bar.textContent = value;
   bar.style.color = color;
+  const area = textId.includes("anadolu") ? "Anadolu" : "Avrupa";
   text.style.color = color;
-  text.textContent = text.textContent.split('(')[0] + ` (${value})`;
+  text.textContent = `${area}: %${value}`;
 }
 
 updateTrafficData();
