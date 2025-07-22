@@ -306,3 +306,48 @@ document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
 });
 updateGeoJSON();
 updateIntervalID = setInterval(updateGeoJSON, 300000);
+
+function getColor(value) {
+  // value: 0-100 arası
+  const r = Math.min(255, Math.round(2.55 * value * 2)); // kırmızı hızlı artar
+  const g = Math.max(0, 255 - Math.round(2.55 * value));
+  return `rgb(${r},${g},0)`;
+}
+
+function getOrtalamaTrafik() {
+  fetch('https://tkmservices.ibb.gov.tr/web/api/TrafficData/v1/TrafficIndex_Sc1_Cont')
+    .then(res => res.text())
+    .then(str => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(str, "application/xml");
+
+      const anadolu = parseInt(xmlDoc.getElementsByTagName("TI_An")[0]?.textContent) || 0;
+      const avrupa = parseInt(xmlDoc.getElementsByTagName("TI_Av")[0]?.textContent) || 0;
+
+      // Anadolu
+      const anaColor = getColor(anadolu);
+      const anaBar = document.getElementById('trafik-anadolu-bar');
+      anaBar.style.width = `${anadolu}%`;
+      anaBar.style.background = `linear-gradient(to right, green, red)`;
+      anaBar.style.backgroundSize = `${anadolu}% 100%`;
+      anaBar.style.backgroundRepeat = 'no-repeat';
+      document.getElementById('trafik-anadolu-text').innerHTML = `Anadolu (%${anadolu})`;
+      document.getElementById('trafik-anadolu-text').style.color = anaColor;
+
+      // Avrupa
+      const avrColor = getColor(avrupa);
+      const avrBar = document.getElementById('trafik-avrupa-bar');
+      avrBar.style.width = `${avrupa}%`;
+      avrBar.style.background = `linear-gradient(to right, green, red)`;
+      avrBar.style.backgroundSize = `${avrupa}% 100%`;
+      avrBar.style.backgroundRepeat = 'no-repeat';
+      document.getElementById('trafik-avrupa-text').innerHTML = `Avrupa (%${avrupa})`;
+      document.getElementById('trafik-avrupa-text').style.color = avrColor;
+
+    })
+    .catch(err => {
+      console.error('Trafik verisi alınamadı:', err);
+      document.getElementById('trafik-anadolu-text').textContent = 'Anadolu (Veri yok)';
+      document.getElementById('trafik-avrupa-text').textContent = 'Avrupa (Veri yok)';
+    });
+}
