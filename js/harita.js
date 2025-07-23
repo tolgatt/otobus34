@@ -306,3 +306,42 @@ document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
 });
 updateGeoJSON();
 updateIntervalID = setInterval(updateGeoJSON, 300000);
+
+function updateTrafficData() {
+  fetch('https://tkmservices.ibb.gov.tr/web/api/TrafficData/v1/TrafficIndex_Sc1_Cont')
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      const tiAn = data.TI_An ?? '—';
+      const tiAv = data.TI_Av ?? '—';
+
+      console.log("Anadolu:", tiAn);
+      console.log("Avrupa:", tiAv);
+
+      updateTrafficBar('trafik-anadolu-bar', 'trafik-anadolu-text', tiAn);
+      updateTrafficBar('trafik-avrupa-bar', 'trafik-avrupa-text', tiAv);
+    })
+    .catch(err => console.error("Trafik verisi alınamadı:", err));
+}
+
+function updateTrafficBar(barId, textId, value) {
+  const bar = document.getElementById(barId);
+  const text = document.getElementById(textId);
+  const percent = Math.min(parseInt(value), 100);
+
+  const hue = Math.max(0, 120 - percent * 1.2);
+  const color = `hsl(${hue}, 100%, 40%)`;
+
+  bar.style.width = percent + "%";
+  bar.style.background = color;
+  bar.textContent = "";
+  bar.style.color = color;
+  const area = textId.includes("anadolu") ? "Anadolu" : "Avrupa";
+  text.style.color = color;
+  text.textContent = `${area}: %${value}`;
+}
+
+updateTrafficData();
+setInterval(updateTrafficData, 120000);

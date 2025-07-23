@@ -80,6 +80,10 @@
       color: #333;
     }
 
+    #control-container label:first-child {
+      margin-bottom: 0;
+    }
+
     #legend {
       position: absolute;
       bottom: 10px;
@@ -232,6 +236,46 @@
     .button-like:hover {
       background-color: #aa0810;
     }
+    
+    .trafik-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .trafik-item {
+      flex: 1 1 120px;
+    }
+
+    .trafik-text {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .trafik-bar {
+      width: 100%;
+      height: 16px;
+      background: #eee;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .trafik-bar-fill {
+      height: 100%;
+      width: 0%;
+      text-align: right;
+      padding-right: 5px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      transition: width 0.5s ease;
+    }
   </style>
   <script src="https://unpkg.com/dayjs@1.11.10/dayjs.min.js"></script>
   <script src="https://unpkg.com/dayjs@1.11.10/plugin/relativeTime.js"></script>
@@ -250,6 +294,24 @@
   <div id="map"></div>
   <div id="loading"><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i> Yükleniyor...</div>
   <div id="control-container">
+    <div id="trafik-verisi">
+      <label>Ortalama trafik:</label>
+      <div class="trafik-row">
+        <div class="trafik-item">
+          <div id="trafik-anadolu-text">Anadolu (…)</div>
+          <div class="trafik-bar">
+            <div id="trafik-anadolu-bar" class="trafik-bar-fill"></div>
+          </div>
+        </div>
+
+        <div class="trafik-item">
+          <div id="trafik-avrupa-text">Avrupa (…)</div>
+          <div class="trafik-bar">
+            <div id="trafik-avrupa-bar" class="trafik-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <label for="search">Kapı no veya plaka ara:</label>
     <input type="text" id="search" placeholder="C-193, 34NL8224...">
     <label for="color-filter">İşletmeye göre filtrele:</label>
