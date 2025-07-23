@@ -344,4 +344,4 @@ function updateTrafficBar(barId, textId, value) {
 }
 
 updateTrafficData();
-setInterval(updateTrafficData, 600000);
+setInterval(updateTrafficData, 120000);
