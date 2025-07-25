@@ -78,60 +78,34 @@ function getPopupHTML(vehicle, lineCode = '—') {
 }
 
 function updateGeoJSON(force = false) {
-  const now = Date.now();
-  if (!force && now - lastUpdateTime < 30000) {
-    alert('30 saniyede birden fazla güncelleme yapılamaz.');
-    return;
-  }
-  document.getElementById('loading').style.display = 'block';
-  fetch('https://arac.iett.gov.tr/api/task/bus-fleet/buses', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .then(res => res.json())
-  .then(data => {
-    markers.clearLayers();
-    allMarkers = [];
-    data.forEach(vehicle => {
-      const lat = vehicle.latitude;
-      const lon = vehicle.longitude;
-      if (!lat || !lon) return;
-      const marker = L.marker([lat, lon], {
-        icon: getCustomIcon(vehicle.garageName),
-        opacity: 1
+  return new Promise((resolve, reject) => {
+    const now = Date.now();
+    if (!force && now - lastUpdateTime < 30000) {
+      alert('30 saniyede birden fazla güncelleme yapılamaz.');
+      resolve(); 
+      return;
+    }
+    document.getElementById('loading').style.display = 'block';
+    fetch('https://arac.iett.gov.tr/api/task/bus-fleet/buses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(data => {
+      markers.clearLayers();
+      allMarkers = [];
+      data.forEach(vehicle => {
       });
-      marker.feature = { properties: vehicle };
-      marker.colorClass = colorClass;
-      marker.bindPopup(getPopupHTML(vehicle));
-      marker.on('click', () => {
-        fetch(`https://arac.iett.gov.tr/api/task/getCarTasks/${vehicle.vehicleDoorCode}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        })
-        .then(res => res.json())
-        .then(taskData => {
-          const lineCode = taskData && taskData.length ? taskData[0].lineCode || '—' : 'Görev yok';
-          marker.bindPopup(getPopupHTML(vehicle, lineCode)).openPopup();
-        })
-        .catch(() => {
-          marker.bindPopup(getPopupHTML(vehicle, 'Hata')).openPopup();
-        });
-      });
-      markers.addLayer(marker);
-      allMarkers.push(marker);
+      document.getElementById('loading').style.display = 'none';
+      lastUpdateTime = Date.now();
+      filterMarkers(false);
+      resolve();
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('loading').innerHTML = 'Otobüs verisi alınamadı <i class="fa-sharp fa-solid fa-face-sad-tear"></i>';
+      resolve();
     });
-
-    allMarkers.forEach(marker => markers.addLayer(marker));
-    map.addLayer(markers);
-
-    document.getElementById('loading').style.display = 'none';
-    lastUpdateTime = Date.now();
-
-    filterMarkers(false);
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById('loading').innerHTML = 'Otobüs verisi alınamadı <i class="fa-sharp fa-solid fa-face-sad-tear"></i>';
   });
 }
 
@@ -363,10 +337,10 @@ function getDurakKoduFromURL() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+  await updateGeoJSON(true);
   const durakKodu = getDurakKoduFromURL();
   if (durakKodu) {
-    console.log("Durak kodu:", durakKodu);
     addStopMarkers(durakKodu);
   }
 });
