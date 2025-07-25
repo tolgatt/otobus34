@@ -263,6 +263,18 @@ function setUpdateInterval() {
   updateIntervalID = setInterval(updateGeoJSON, minutes * 60000);
 }
 
+function getDurakKoduFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const durakKodu = params.get('durak');
+
+  if (durakKodu && /^\d{6}$/.test(durakKodu)) {
+    return durakKodu;
+  } else {
+    console.warn('Geçerli bir durak kodu bulunamadı.');
+    return null;
+  }
+}
+
 function addStopMarkers(durakKodu) {
   return fetch('https://durak.iett.gov.tr/api/stop/real-time-information/stop-arrivals', {
     method: 'POST',
@@ -297,9 +309,8 @@ function addStopMarkers(durakKodu) {
             </div>
             <div class="popup-section">
               <strong><i class="fa-sharp fa-solid fa-route"></i> Anlık hat:</strong> ${item.hatkodu}<br>
-              <strong></strong> ${item.hatadi}<br>
               <strong><i class="fa-sharp fa-solid fa-arrow-left"></i> Güzergah:</strong> ${item.guzergah}<br>
-              <strong><i class="fa-sharp fa-solid fa-compass"></i> Tahmini varış:</strong> ${item.dakika} dakika (${item.saat})
+              <strong><i class="fa-sharp fa-solid fa-compass"></i> Varış:</strong> ${item.dakika} dakika (${item.saat})
             </div>
             <div class="popup-section">
               <strong><i class="fa-sharp fa-solid fa-garage"></i> Garaj:</strong> ${vehicle.garageName || '—'}<br>
