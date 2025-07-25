@@ -263,18 +263,6 @@ function setUpdateInterval() {
   updateIntervalID = setInterval(updateGeoJSON, minutes * 60000);
 }
 
-function getDurakKoduFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const durakKodu = params.get('durak');
-
-  if (durakKodu && /^\d{6}$/.test(durakKodu)) {
-    return durakKodu;
-  } else {
-    console.warn('Geçerli bir durak kodu bulunamadı.');
-    return null;
-  }
-}
-
 function addStopMarkers(durakKodu) {
   return fetch('https://durak.iett.gov.tr/api/stop/real-time-information/stop-arrivals', {
     method: 'POST',
@@ -363,6 +351,27 @@ function addStopMarkers(durakKodu) {
   })
   .catch(err => console.error('Durak sorgu hatası:', err));
 }
+
+function getDurakKoduFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const durakKodu = params.get('durak');
+
+  if (durakKodu && /^\d{6}$/.test(durakKodu)) {
+    return durakKodu;
+  } else {
+    console.warn('Geçerli bir durak kodu bulunamadı.');
+    return null;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const durakKodu = getDurakKoduFromURL();
+  if (durakKodu) {
+    console.log("Durak kodu:", durakKodu);
+    // Örnek kullanım:
+    addStopMarkers(durakKodu);
+  }
+});
 
 document.getElementById('update-button').addEventListener('click', updateGeoJSON);
 document.getElementById('search').addEventListener('input', filterMarkers);
