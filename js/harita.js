@@ -283,6 +283,12 @@ function addStopMarkers(durakKodu) {
       if (matchedMarker) {
         const vehicle = matchedMarker.feature.properties;
 
+        const containerClass = !vehicle.garageName ? 'red' : ["Hasanpaşa", "Edirnekapı"].includes(vehicle.garageName) ? 'blue' : ["ADALAR"].includes(vehicle.garageName) ? 'green' : 'black';
+        
+        const lastDateTimeString = `${vehicle.lastLocationDate} ${vehicle.lastLocationTime}`;
+        const parsed = dayjs(lastDateTimeString, "DD-MM-YYYY HH:mm:ss");
+        const relative = parsed.isValid() ? parsed.fromNow() : '-';
+        
         const popupHTML = `
           <div class="popup-container ${containerClass}">
             <div class="popup-header">
