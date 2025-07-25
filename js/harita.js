@@ -263,6 +263,89 @@ function setUpdateInterval() {
   updateIntervalID = setInterval(updateGeoJSON, minutes * 60000);
 }
 
+function addStopMarkers(durakKodu) {
+  return fetch('https://durak.iett.gov.tr/api/stop/real-time-information/stop-arrivals', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ stopCode: durakKodu })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const matchedMarkers = [];
+
+    data.forEach(item => {
+      const kapino = item.kapino;
+      const matchedMarker = allMarkers.find(marker => {
+        const vehicle = marker.feature.properties;
+        return vehicle.vehicleDoorCode === kapino;
+      });
+
+      if (matchedMarker) {
+        const vehicle = matchedMarker.feature.properties;
+
+        const popupHTML = `
+          <div class="popup-container ${containerClass}">
+            <div class="popup-header">
+              <div class="door-code">${vehicle.vehicleDoorCode}</div>
+              <div class="plate">${vehicle.numberPlate}</div>
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-route"></i> Anlık hat:</strong> ${item.hatkodu}<br>
+              <strong></strong> ${item.hatadi}<br>
+              <strong><i class="fa-sharp fa-solid fa-arrow-left"></i> Güzergah:</strong> ${item.guzergah}<br>
+              <strong><i class="fa-sharp fa-solid fa-compass"></i> Tahmini varış:</strong> ${item.dakika} dakika (${item.saat})
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-garage"></i> Garaj:</strong> ${vehicle.garageName || '—'}<br>
+              <strong><i class="fa-sharp fa-solid fa-briefcase-blank"></i> Şirket:</strong> ${vehicle.operatorType}
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-bus-simple"></i> Model:</strong> ${vehicle.modelYear} ${vehicle.brandName}<br>
+              <strong><i class="fa-sharp fa-solid fa-van-shuttle"></i> Tür:</strong> ${vehicle.vehicleType || '-'}<br>
+              <strong><i class="fa-sharp fa-solid fa-person-seat"></i> Kapasite:</strong> ${vehicle.seatingCapacity || '-'} / ${vehicle.fullCapacity}
+            </div>
+            <div class="popup-section">
+              <strong><i class="fa-sharp fa-solid fa-calendar-clock"></i> Son veri:</strong> ${vehicle.lastLocationDate} ${vehicle.lastLocationTime}<br>
+              <strong></strong> (${relative})<br>
+              <strong><i class="fa-sharp fa-solid fa-gauge-high"></i> Hız:</strong> ${vehicle.speed} km/h
+            </div>
+            <div class="popup-icons">
+              <div class="icon-badge ${vehicle.accessibility ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wheelchair"></i></div>
+              <div class="icon-badge"><i class="fa-sharp fa-solid fa-fan"></i></div>
+              <div class="icon-badge ${vehicle.hasUsbCharger ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-battery-bolt"></i></div>
+              <div class="icon-badge ${vehicle.hasWifi ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-wifi"></i></div>
+              <div class="icon-badge ${vehicle.hasBicycleRack ? '' : 'disabled'}"><i class="fa-sharp fa-solid fa-bicycle"></i></div>
+            </div>
+            <div class="popup-links">
+              <a class="popup-link" href="https://arac.iett.gov.tr/${vehicle.vehicleDoorCode}" target="_blank"><i class="fa-sharp fa-solid fa-link"></i> Araç İETT</a>
+              <a class="popup-link" href="gorev.html?arac=${vehicle.vehicleDoorCode}&utm_source=harita" target="_blank"><i class="fa-sharp fa-solid fa-list-radio"></i> Görev bilgisi</a>
+            </div>
+          </div>
+        `;
+
+        matchedMarker.closePopup();
+        matchedMarker.unbindPopup();
+        matchedMarker.bindPopup(popupHTML).openPopup();
+
+        matchedMarkers.push(matchedMarker);
+      } else {
+        console.log(`Durak sorgusunda kapino eşleşmedi: ${kapino}`);
+      }
+    });
+
+    matchedMarkers.forEach(marker => markers.addLayer(marker));
+    map.addLayer(markers);
+
+    if (matchedMarkers.length === 1) {
+      map.setView(matchedMarkers[0].getLatLng(), 16, { animate: true });
+    } else if (matchedMarkers.length > 1) {
+      const group = L.featureGroup(matchedMarkers);
+      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    }
+  })
+  .catch(err => console.error('Durak sorgu hatası:', err));
+}
+
 document.getElementById('update-button').addEventListener('click', updateGeoJSON);
 document.getElementById('search').addEventListener('input', filterMarkers);
 document.getElementById('color-filter').addEventListener('input', filterMarkers);
@@ -275,28 +358,30 @@ document.getElementById('toggle-btn').addEventListener('click', () => {
   const control = document.getElementById('control-container');
   control.style.display = control.style.display === 'block' ? 'none' : 'block';
 });
-document.getElementById('hat-kodu-filtrele-btn').addEventListener('click', () => {
-  const input = document.getElementById('hat-kodu-input').value.trim();
-  if (input) {
-    const hatKodlari = input.split(',').map(h => h.trim()).filter(h => h !== '');
-    if (hatKodlari.length === 0) {
-      alert('Lütfen geçerli bir hat kodu girin.');
-      return;
-    }
+document.getElementById('kod-filtrele-btn').addEventListener('click', () => {
+  const hatInput = document.getElementById('hat-kodu-input').value.trim();
+  const durakInput = document.getElementById('durak-kodu-input').value.trim();
 
-    markers.clearLayers();
+  const hatKodlari = hatInput ? hatInput.split(',').map(h => h.trim()).filter(h => h !== '') : [];
+  const durakKodlari = durakInput ? durakInput.split(',').map(d => d.trim()).filter(d => d !== '') : [];
 
-    Promise.all(
-      hatKodlari.map(hatKodu => addRouteMarkers(hatKodu))
-    ).then(() => {
-      console.log('Tüm hat kodları işlendi.');
-    }).catch(err => {
-      console.error('Hat kodları yüklenirken hata oluştu:', err);
-    });
-
-  } else {
-    alert('Lütfen geçerli bir hat kodu girin.');
+  if (hatKodlari.length === 0 && durakKodlari.length === 0) {
+    alert('Lütfen hat veya durak kodu girin.');
+    return;
   }
+
+  markers.clearLayers();
+
+  Promise.all([
+    ...hatKodlari.map(hat => addRouteMarkers(hat)),
+    ...durakKodlari.map(durak => addStopMarkers(durak))
+  ])
+  .then(() => {
+    console.log('Filtreleme tamamlandı.');
+  })
+  .catch(err => {
+    console.error('Filtreleme hatası:', err);
+  });
 });
 document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
   document.getElementById('hat-kodu-input').value = '';
