@@ -385,8 +385,11 @@ document.getElementById('kod-filtrele-btn').addEventListener('click', () => {
 });
 document.getElementById('filtreyi-kaldir-btn').addEventListener('click', () => {
   document.getElementById('hat-kodu-input').value = '';
+  document.getElementById('durak-kodu-input').value = '';
+
   markers.clearLayers();
   map.removeLayer(markers);
+  
   updateGeoJSON(true);
 });
 updateGeoJSON();
