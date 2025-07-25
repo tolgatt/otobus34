@@ -355,11 +355,10 @@ function addStopMarkers(durakKodu) {
 function getDurakKoduFromURL() {
   const params = new URLSearchParams(window.location.search);
   const durakKodu = params.get('durak');
-
-  if (durakKodu && /^\d{6}$/.test(durakKodu)) {
+  if (durakKodu) {
     return durakKodu;
   } else {
-    console.warn('Geçerli bir durak kodu bulunamadı.');
+    console.warn('Durak kodu parametresi yok.');
     return null;
   }
 }
@@ -368,7 +367,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const durakKodu = getDurakKoduFromURL();
   if (durakKodu) {
     console.log("Durak kodu:", durakKodu);
-    // Örnek kullanım:
     addStopMarkers(durakKodu);
   }
 });
