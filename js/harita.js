@@ -331,6 +331,7 @@ function addStopMarkers(durakKodu) {
 
         matchedMarker.closePopup();
         matchedMarker.unbindPopup();
+        matchedMarker.off('click');
         matchedMarker.bindPopup(popupHTML).openPopup();
 
         matchedMarkers.push(matchedMarker);
