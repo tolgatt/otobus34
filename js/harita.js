@@ -298,7 +298,7 @@ function addStopMarkers(durakKodu) {
             <div class="popup-section">
               <strong><i class="fa-sharp fa-solid fa-route"></i> Anlık hat:</strong> ${item.hatkodu}<br>
               <strong><i class="fa-sharp fa-solid fa-arrow-left"></i> Güzergah:</strong> ${item.guzergah}<br>
-              <strong><i class="fa-sharp fa-solid fa-compass"></i> Varış:</strong> ${item.dakika} dakika (${item.saat})
+              <strong><i class="fa-sharp fa-solid fa-clock-eight"></i> Varış:</strong> ${item.dakika} dakika (${item.saat})
             </div>
             <div class="popup-section">
               <strong><i class="fa-sharp fa-solid fa-garage"></i> Garaj:</strong> ${vehicle.garageName || '—'}<br>
