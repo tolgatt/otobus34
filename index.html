@@ -87,14 +87,6 @@
     #control-container .button-row.search-row {
       margin-bottom: 0;
     }
-
-    .button-row.search-row label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px !important;
-      font-weight: 600;
-      color: #333;
-    }
     
     #legend {
       position: absolute;
@@ -144,7 +136,7 @@
       display: block;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       #control-container {
         top: auto;
         bottom: 60px;
@@ -153,6 +145,7 @@
         max-width: none;
         transform-origin: bottom left;
         transform: scale(0.60);
+        display: none;
       }
 
       .popup-container {
