@@ -312,8 +312,16 @@
         </div>
       </div>
     </div>
-    <label for="search">Kapı no veya plaka ara:</label>
-    <input type="text" id="search" placeholder="C-193, 34NL8224...">
+    <div class="button-row">
+      <div style="flex: 1;">
+        <label for="search">Kapı no veya plaka ara:</label>
+        <input type="text" id="search" placeholder="C-193, 34NL8224...">
+      </div>
+      <div style="flex: 1;">
+        <label for="update-interval">Güncelleme aralığı (dakika):</label>
+        <input type="number" id="update-interval" min="0.5" max="20" value="5">
+      </div>
+    </div>
     <label for="color-filter">İşletmeye göre filtrele:</label>
     <select id="color-filter">
       <option value="">Tümü</option>
@@ -322,8 +330,6 @@
       <option value="blue">Metrobüs</option>
       <option value="green">Adalar</option>
     </select>
-    <label for="update-interval">Güncelleme aralığı (dakika):</label>
-    <input type="number" id="update-interval" min="0.5" max="20" value="5">
     <label for="hat-kodu-input">Anlık hatta göre filtrele:<br>Virgülle ayırarak birden fazla hat yazılabilir.</label>
     <input type="text" id="hat-kodu-input" placeholder="14B, 146..."/>
     <label for="durak-kodu-input">Durağa yaklaşan otobüsleri filtrele:</label>
@@ -332,7 +338,6 @@
       <button id="kod-filtrele-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter" style="color: #ffffff;"></i> Filtrele</button>
       <button id="filtreyi-kaldir-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter-slash" style="color: #ffffff;"></i> Filtreyi kaldır</button>
     </div>
-  
     <div class="button-row">
       <button id="update-button" class="button-like">
         <i class="fa-sharp fa-solid fa-arrows-rotate fa-spin" style="color: #ffffff;"></i>
