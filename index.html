@@ -84,6 +84,10 @@
       margin-bottom: 0;
     }
 
+    #control-container .button-row.search-row {
+      margin-bottom: 0;
+    }
+    
     #legend {
       position: absolute;
       bottom: 10px;
@@ -132,7 +136,7 @@
       display: block;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       #control-container {
         top: auto;
         bottom: 60px;
@@ -140,18 +144,19 @@
         left: 10px;
         max-width: none;
         transform-origin: bottom left;
-        transform: scale(0.75);
+        transform: scale(0.65);
+        display: none;
       }
 
       .popup-container {
         max-width: 80vw !important;
         transform-origin: center bottom;
-        transform: scale(0.75);
+        transform: scale(0.65);
       }
 
       #legend {
         transform-origin: bottom left;
-        transform: scale(0.75);
+        transform: scale(0.65);
       }
     }
 
@@ -213,7 +218,7 @@
       flex-wrap: wrap;
       margin-bottom: 10px;
     }
-
+    
     .button-row:last-child {
       margin-bottom: 0;
     }
@@ -312,8 +317,26 @@
         </div>
       </div>
     </div>
-    <label for="search">Kapı no veya plaka ara:</label>
-    <input type="text" id="search" placeholder="C-193, 34NL8224...">
+    <div class="button-row search-row">
+      <div style="flex: 1;">
+        <label for="search">Kapı no - plaka ara:</label>
+        <input type="text" id="search" placeholder="C-193, 34NL8224...">
+      </div>
+      <div style="flex: 1;">
+        <label for="update-interval">Güncelleme sıklığı:</label>
+        <input type="number" id="update-interval" min="0.5" max="20" value="5">
+      </div>
+    </div>
+    <div class="button-row search-row">
+      <div style="flex: 1;">
+        <label for="hat-kodu-input">Hatta göre filtrele:</label>
+        <input type="text" id="hat-kodu-input" placeholder="14B, 146..."/>
+      </div>
+      <div style="flex: 1;">
+        <label for="durak-kodu-input">Durağa yaklaşanlar:</label>
+        <input type="text" id="durak-kodu-input" placeholder="Durak kodu yazınız. (6 haneli)"/>
+      </div>
+    </div>
     <label for="color-filter">İşletmeye göre filtrele:</label>
     <select id="color-filter">
       <option value="">Tümü</option>
@@ -322,17 +345,10 @@
       <option value="blue">Metrobüs</option>
       <option value="green">Adalar</option>
     </select>
-    <label for="update-interval">Güncelleme aralığı (dakika):</label>
-    <input type="number" id="update-interval" min="0.5" max="20" value="5">
-    <label for="hat-kodu-input">Anlık hatta göre filtrele:<br>Virgülle ayırarak birden fazla hat yazılabilir.</label>
-    <input type="text" id="hat-kodu-input" placeholder="14B, 146..."/>
-    <label for="durak-kodu-input">Durağa yaklaşan otobüsleri filtrele:</label>
-    <input type="text" id="durak-kodu-input" placeholder="Durak kodu yazınız. (6 haneli)"/>
     <div class="button-row">
       <button id="kod-filtrele-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter" style="color: #ffffff;"></i> Filtrele</button>
       <button id="filtreyi-kaldir-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter-slash" style="color: #ffffff;"></i> Filtreyi kaldır</button>
     </div>
-  
     <div class="button-row">
       <button id="update-button" class="button-like">
         <i class="fa-sharp fa-solid fa-arrows-rotate fa-spin" style="color: #ffffff;"></i>
