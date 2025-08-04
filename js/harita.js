@@ -432,7 +432,7 @@ function updateTrafficBar(barId, textId, value) {
   bar.style.background = color;
   bar.textContent = "";
   bar.style.color = color;
-  const area = textId.includes("anadolu") ? "<b>Anadolu</b>" : "<b>Avrupa</b>";
+  const area = textId.includes("anadolu") ? "Anadolu" : "Avrupa";
   text.style.color = color;
   text.textContent = `${area}: %${value}`;
 }
