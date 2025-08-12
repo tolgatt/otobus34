@@ -1,7 +1,5 @@
 const map = L.map('map').setView([41.0161, 28.9944], 13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors | Icons by <a href="https://www.fontawesome.com">Font Awesome</a>'
-}).addTo(map);
+L.tileLayer.provider('Stadia.Outdoors').addTo(map);
 
 let markers = L.markerClusterGroup();
 let allMarkers = [];
