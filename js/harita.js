@@ -1,5 +1,5 @@
 const map = L.map('map').setView([41.0161, 28.9944], 13);
-L.tileLayer.provider('OpenStreetMap.HOT').addTo(map);
+L.tileLayer.provider('OpenStreetMap.Mapnik').addTo(map);
 
 let markers = L.markerClusterGroup();
 let allMarkers = [];
