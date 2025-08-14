@@ -23,6 +23,7 @@
     h1, h2 { text-align: center; color: #444; }
     form { max-width: 400px; margin: 0 auto 20px auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
     form label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+    .warning-label { color: red; }
     form input { width: 100%; padding: 6px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
     form button { width: 100%; margin-top: 15px; padding: 10px; background: #e50f19; color: #fff; border: none; font-size: 16px; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
     form button:hover { background: #aa0810; }
@@ -42,7 +43,7 @@
   <h1>İETT Geçmiş Seferler</h1>
 
   <form id="filterForm">
-    <label>(14ŞB, 29Ş gibi içinde 'Ş' harfi olan hatları yazarken 'Ş' harfi yerine 'S' harfini yazınız. Örnek: 14SB, 29S)</label>
+    <label class="warning-label"><i class="fa-sharp fa-solid fa-warning"></i> Uyarı<br>14ŞB, 29Ş gibi içinde 'Ş' harfi olan hatları yazarken 'Ş' harfi yerine 'S' harfini yazınız. Örnek: 14SB, 29S</label>
     <label>Tarih:
       <input type="date" name="tarih" id="tarihInput">
     </label>
