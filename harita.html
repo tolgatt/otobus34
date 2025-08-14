@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5HQGHMMDKB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5HQGHMMDKB');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#e50f19" />
+  <meta name="description" content="Tüm İETT otobüsleri canlı olarak tek bir haritada." />
+  <meta name="keywords" content="iett, mobiett, otobüsüm nerede, otobüsüm, otobüs nerede, istanbul otobüs, iett otobüs, iett otobüsüm nerede, hattı, hat, hattı nerede, numara nerede, mobil iett, iett mobil, otobüs takip, canlı otobüs takip, canlı otobüs, araç iett, iett otobüs, otobüsüm nerede iett, iett araç takip, bayramda iett ücretsiz mi, bugün iett ler ücretsiz mi, iett canlı, iett canlı takip, iett canlı durak, iett citaro, canlı otobüs takip iett, iett çalışmıyor mu, iett durak otobüsüm nerede, iett grev, iett otobüs nerede, kadıköy e giden iett otobüsleri, iett ler ücretsiz mi bugün,  iett otobüs saatleri, iett otobüs seferleri, otobüs sorgulama iett, iett özel halk otobüsü, silivri ye giden iett otobüsleri, silivri iett saatleri, iett ulaşım haritası, iett ve öho farkı, iett harita">
+  <title>İETT Otobüsleri - Harita</title>
+  <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; padding: 0; font-family: 'Source Sans 3', sans-serif; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #loading {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 18px;
+      z-index: 1000;
+    }
+
+    a { text-decoration: none; }
+
+    #control-container {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1001;
+      background-color: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      max-width: 280px;
+      width: 90%;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+
+    #control-container input,
+    #control-container select {
+      display: block;
+      margin-bottom: 12px;
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease;
+    }
+
+    #control-container input:focus {
+      border-color: #4a90e2;
+      outline: none;
+    }
+
+    #control-container label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    #control-container label:first-child {
+      margin-bottom: 0;
+    }
+
+    #control-container .button-row.search-row {
+      margin-bottom: 0;
+    }
+    
+    #legend {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      z-index: 1001;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      max-width: 250px;
+    }
+    #legend h4 {
+      margin: 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #legend-content {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    #legend img {
+      vertical-align: middle;
+    }
+
+    .toggle-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1002;
+      padding: 8px;
+      background-color: #e50f19;
+      border-radius: 50%;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+      background-color: #aa0810;
+    }
+
+    .toggle-btn img {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      #control-container {
+        top: auto;
+        bottom: 60px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform-origin: bottom left;
+        transform: scale(0.65);
+        display: none;
+      }
+
+      .popup-container {
+        max-width: 80vw !important;
+        transform-origin: center bottom;
+        transform: scale(0.65);
+      }
+
+      #legend {
+        transform-origin: bottom left;
+        transform: scale(0.65);
+      }
+    }
+
+    .popup-container {
+      font-family: "Source Sans 3", sans-serif;
+      font-size: 12px;
+      width: 270px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      overflow: hidden;
+      color: #333;
+      border-left: 6px solid #333;
+    }
+    .popup-container.red { border-color: #e74c3c; }
+    .popup-container.blue { border-color: #3498db; }
+    .popup-container.black { border-color: #2c3e50; }
+    .popup-container.green { border-color: #2aad27; }
+    .popup-header { background: #f5f5f5; padding: 10px; border-bottom: 1px solid #ddd; }
+    .popup-header .door-code { font-size: 16px; font-weight: bold; color: #2c3e50; }
+    .popup-header .plate { color: #777; font-size: 13px; }
+    .popup-section { padding: 10px; border-bottom: 1px solid #eee; }
+    .popup-section:last-child { border-bottom: none; }
+    .popup-section strong { display: inline-block; width: 80px; color: #555; }
+    .popup-icons { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; justify-content: center; }
+    .icon-badge { display: flex; align-items: center; gap: 4px; font-size: 12px; background: #ecf0f1; padding: 4px 8px; border-radius: 12px; color: #2c3e50; }
+    .icon-badge.disabled { opacity: 0.4; }
+    .popup-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      padding: 5px;
+    }
+
+    .popup-link {
+      padding: 5px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 12px;
+      color: #2980b9;
+      font-weight: 500;
+    }
+
+    .popup-link:hover {
+      background: #d0d7de;
+      text-decoration: underline;
+    }
+    
+    .leaflet-popup-content-wrapper {
+      background: transparent;
+      box-shadow: none;
+      border: none;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    
+    .button-row:last-child {
+      margin-bottom: 0;
+    }
+    
+    .button-like {
+      flex: 1 1 calc(33.33% - 10px);
+      min-width: 0;
+      text-align: center;
+      background-color: #e50f19;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    .button-like:hover {
+      background-color: #aa0810;
+    }
+    
+    .trafik-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .trafik-item {
+      flex: 1 1 120px;
+    }
+
+    .trafik-text {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .trafik-bar {
+      width: 100%;
+      height: 16px;
+      background: #eee;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .trafik-bar-fill {
+      height: 100%;
+      width: 0%;
+      text-align: right;
+      padding-right: 5px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      transition: width 0.5s ease;
+    }
+  </style>
+  <script src="https://unpkg.com/dayjs@1.11.10/dayjs.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.10/plugin/relativeTime.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.10/plugin/customParseFormat.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.10/locale/tr.js"></script>
+  <script>
+    dayjs.extend(dayjs_plugin_relativeTime);
+    dayjs.extend(dayjs_plugin_customParseFormat);
+    dayjs.locale('tr');
+  </script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  <script src="js/harita.js" defer></script>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="loading"><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i> Yükleniyor...</div>
+  <div id="control-container">
+    <div id="trafik-verisi">
+      <label>Ortalama trafik:</label>
+      <div class="trafik-row">
+        <div class="trafik-item">
+          <div id="trafik-anadolu-text">Anadolu (…)</div>
+          <div class="trafik-bar">
+            <div id="trafik-anadolu-bar" class="trafik-bar-fill"></div>
+          </div>
+        </div>
+
+        <div class="trafik-item">
+          <div id="trafik-avrupa-text">Avrupa (…)</div>
+          <div class="trafik-bar">
+            <div id="trafik-avrupa-bar" class="trafik-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="button-row search-row">
+      <div style="flex: 1;">
+        <label for="search">Kapı no - plaka ara:</label>
+        <input type="text" id="search" placeholder="C-193, 34NL8224...">
+      </div>
+      <div style="flex: 1;">
+        <label for="update-interval">Güncelleme sıklığı:</label>
+        <input type="number" id="update-interval" min="0.5" max="20" value="5">
+      </div>
+    </div>
+    <div class="button-row search-row">
+      <div style="flex: 1;">
+        <label for="hat-kodu-input">Hatta göre filtrele:</label>
+        <input type="text" id="hat-kodu-input" placeholder="14B, 146..."/>
+      </div>
+      <div style="flex: 1;">
+        <label for="durak-kodu-input">Durağa yaklaşanlar:</label>
+        <input type="text" id="durak-kodu-input" placeholder="Durak kodu yazınız. (6 haneli)"/>
+      </div>
+    </div>
+    <label for="color-filter">İşletmeye göre filtrele:</label>
+    <select id="color-filter">
+      <option value="">Tümü</option>
+      <option value="black">İETT</option>
+      <option value="red">ÖHO</option>
+      <option value="blue">Metrobüs</option>
+      <option value="green">Adalar</option>
+    </select>
+    <div class="button-row">
+      <button id="kod-filtrele-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter" style="color: #ffffff;"></i> Filtrele</button>
+      <button id="filtreyi-kaldir-btn" class="button-like"><i class="fa-sharp fa-solid fa-filter-slash" style="color: #ffffff;"></i> Filtreyi kaldır</button>
+    </div>
+    <div class="button-row">
+      <button id="update-button" class="button-like">
+        <i class="fa-sharp fa-solid fa-arrows-rotate fa-spin" style="color: #ffffff;"></i> Yenile
+      </button>
+      <a href="index.html?utm_source=harita" target="_blank" class="button-like">
+        <i class="fa-sharp fa-solid fa-home" style="color: #ffffff;"></i> Ana sayfa
+      </a>
+    </div>
+  </div>
+
+  <div id="legend">
+    <h4>Lejant ve servis durumu</h4>
+    <div id="legend-content">
+      <div><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" width="12" height="20"> ÖHO</div>
+      <div><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" width="12" height="20"> Metrobüs</div>
+      <div><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png" width="12" height="20"> İETT</div>
+      <div><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" width="12" height="20"> Adalar</div>
+      <iframe src="https://otobus34.betteruptime.com/badge?theme=light" width="180" height="30" frameborder="0" scrolling="no"></iframe>
+      <div style="margin-top: 10px;">
+        <span style="font-size: 12px; color: #666;">Tolga T. (2025)</span>
+      </div>
+    </div>
+  </div>
+  <div class="toggle-btn" id="toggle-btn" title="Filtre Panelini Aç/Kapat">
+    <img src="ikonlar/otobusseffaf.ico">
+  </div>
+</body>
+</html>
