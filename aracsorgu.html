@@ -1,1 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İETT Araç Sorgulama</title>
+  <meta name="description" content="Tüm İETT otobüslerini ve araç bilgilerini canlı olarak sorgulayın.">
+  <meta name="theme-color" content="#e50f19">
+  <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background-color: #f5f6fa;
+      margin: 10px;
+      color: #333;
+    }
 
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .button-row input,
+    .button-row button {
+      padding: 8px 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .button-row input:focus {
+      outline: none;
+      border-color: #e50f19;
+      box-shadow: 0 0 5px rgba(229, 15, 25, 0.4);
+    }
+
+    .button-row button {
+      background-color: #e50f19;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .button-row button:hover {
+      background-color: #aa0810;
+    }
+
+    .panel {
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .panel-header {
+      background: #e50f19;
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 15px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-header i {
+      transition: transform 0.3s;
+    }
+
+    .panel-content {
+      padding: 12px 15px;
+      display: none;
+      background: #fff5f5;
+    }
+
+    .panel.open .panel-content {
+      display: block;
+    }
+
+    @media(min-width:768px) {
+      .layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 15px;
+        align-items: start;
+      }
+
+      .left-col {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+
+    #task-frame iframe {
+      width: 100%;
+      height: 600px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    #map {
+      width: 100%;
+      height: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="button-row search-row">
+    <input type="text" id="vehicle-code" placeholder="Kapı no (A-087, M4633...)">
+    <button id="search-btn">Sorgula</button>
+  </div>
+
+  <div class="layout">
+    <div class="left-col">
+      <div class="panel open" id="panel-info">
+        <div class="panel-header">
+          Araç bilgileri
+          <i class="fa-solid fa-chevron-up"></i>
+        </div>
+        <div class="panel-content" id="vehicle-info">
+          Kapı no yazınız.
+        </div>
+      </div>
+
+      <div class="panel open" id="panel-location">
+        <div class="panel-header">
+          Araç konumu
+          <i class="fa-solid fa-chevron-up"></i>
+        </div>
+        <div class="panel-content">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel open" id="panel-task">
+      <div class="panel-header">
+        Görev bilgisi
+        <i class="fa-solid fa-chevron-up"></i>
+      </div>
+      <div class="panel-content" id="task-frame">
+        Kapı no yazınız.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    let map, marker;
+    document.querySelectorAll('.panel-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const panel = header.parentElement;
+        panel.classList.toggle('open');
+        const icon = header.querySelector('i');
+        if (panel.classList.contains('open')) {
+          icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+        } else {
+          icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+        }
+        if (panel.id === 'panel-location' && map) {
+          setTimeout(() => map.invalidateSize(), 300);
+        }
+      });
+    });
+    document.getElementById('search-btn').addEventListener('click', async () => {
+      const code = document.getElementById('vehicle-code').value.trim();
+      if (!code) {
+        alert('Araç kodu giriniz.');
+        return;
+      }
+      try {
+        const res = await fetch(`https://arac.iett.gov.tr/api/task/bus-fleet/buses/${code}`, {
+          method: 'POST'
+        });
+        if (!res.ok) throw new Error("API hatası");
+        const data = await res.json();
+        const lastLoc = data.lastLocationDate && data.lastLocationTime ? `${data.lastLocationDate} ${data.lastLocationTime}` : '-';
+        document.getElementById('vehicle-info').innerHTML = `
+      <strong>Plaka:</strong> ${data.numberPlate || '-'}<br>
+      <strong>Şirket:</strong> ${data.operatorType || '-'}<br>
+      <strong>Araç:</strong> ${data.brandName || '-'} ${data.modelYear || '-'}<br>
+      <strong>Tip:</strong> ${data.vehicleType || '-'}<br>
+      <strong>Kapasite:</strong> ${data.fullCapacity || '-'}/${data.seatingCapacity || '-'}<br>
+      <strong>Son güncelleme:</strong> ${lastLoc}
+    `;
+        document.getElementById('task-frame').innerHTML = `
+      <iframe src="gorev2.html?arac=${encodeURIComponent(code)}"></iframe>
+    `;
+        if (data.latitude && data.longitude) {
+          if (!map) {
+            map = L.map('map').setView([data.latitude, data.longitude], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19
+            }).addTo(map);
+            marker = L.marker([data.latitude, data.longitude]).addTo(map);
+          } else {
+            map.setView([data.latitude, data.longitude], 15);
+            marker.setLatLng([data.latitude, data.longitude]);
+          }
+          setTimeout(() => map.invalidateSize(), 300);
+        } else {
+          document.getElementById('map').innerHTML = "Konum bilgisi yok.";
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Veri alınamadı.');
+      }
+    });
+  </script>
+</body>
+
+</html>
