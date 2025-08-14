@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#e50f19" />
+  <title>İETT Araç Görevleri</title>
+  <link rel="icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="ikonlar/otobus.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"/>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background-color: #ffffff;
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+      color: #333;
+    }
+
+input, button {
+  padding: 10px;
+  font-size: 16px;
+  margin: 5px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.task {
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+}
+
+.task-header {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.note {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.pulse {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pulse .dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: #007bff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.pulse::before,
+.pulse::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(0, 123, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  animation: pulse 1.5s infinite;
+  z-index: 1;
+}
+
+.pulse::after {
+  animation-delay: 0.75s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+#timestamp {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.copy-btn {
+  position: absolute !important;
+  bottom: 8px !important;
+  right: 8px !important;
+  padding: 4px 6px !important;
+  font-size: 14px !important;
+  border-radius: 4px !important;
+  background-color: transparent !important;
+  color: #000 !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.copy-btn:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+    
+  </style>
+  <script src="js/gorev2.js" defer></script>
+</head>
+<body>
+  <div id="timestamp"></div>
+  <div id="tasksContainer" class="task-grid"></div>
+</body>
+</html>
