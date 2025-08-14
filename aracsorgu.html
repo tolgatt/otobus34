@@ -52,26 +52,12 @@
       background-color: #aa0810;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 15px;
-      align-items: start;
-    }
-
-    .left-col {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
     .panel {
       border-radius: 10px;
       background: #fff;
       box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      margin-bottom: 15px;
     }
 
     .panel-header {
@@ -99,21 +85,26 @@
       display: block;
     }
 
-    #panel-task {
-      flex: 1;
-      min-height: 300px;
-    }
+    @media(min-width:768px) {
+      .layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 15px;
+        align-items: start;
+      }
 
-    #panel-task .panel-content {
-      flex: 1;
-      overflow: auto;
+      .left-col {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
     }
 
     #task-frame iframe {
       width: 100%;
-      height: 100%;
+      height: 600px;
       border-radius: 8px;
-      border: none;
+      border: 1px solid #ccc;
     }
 
     #map {
@@ -121,18 +112,6 @@
       height: 300px;
       border-radius: 8px;
       border: 1px solid #ccc;
-    }
-
-    @media(max-width:768px) {
-      .layout {
-        display: block;
-      }
-      .left-col {
-        width: 100%;
-      }
-      #panel-task {
-        min-height: 200px;
-      }
     }
   </style>
 </head>
@@ -182,7 +161,6 @@
 
   <script>
     let map, marker;
-
     document.querySelectorAll('.panel-header').forEach(header => {
       header.addEventListener('click', () => {
         const panel = header.parentElement;
@@ -198,11 +176,10 @@
         }
       });
     });
-
     document.getElementById('search-btn').addEventListener('click', async () => {
       const code = document.getElementById('vehicle-code').value.trim();
       if (!code) {
-        alert('Araç kodu giriniz.');
+        alert('Kapı no giriniz.');
         return;
       }
       try {
@@ -212,20 +189,17 @@
         if (!res.ok) throw new Error("API hatası");
         const data = await res.json();
         const lastLoc = data.lastLocationDate && data.lastLocationTime ? `${data.lastLocationDate} ${data.lastLocationTime}` : '-';
-
         document.getElementById('vehicle-info').innerHTML = `
-          <strong>Plaka:</strong> ${data.numberPlate || '-'}<br>
-          <strong>Şirket:</strong> ${data.operatorType || '-'}<br>
-          <strong>Araç:</strong> ${data.brandName || '-'} ${data.modelYear || '-'}<br>
-          <strong>Tip:</strong> ${data.vehicleType || '-'}<br>
-          <strong>Kapasite:</strong> ${data.fullCapacity || '-'}/${data.seatingCapacity || '-'}<br>
-          <strong>Son güncelleme:</strong> ${lastLoc}
-        `;
-
+      <strong>Plaka:</strong> ${data.numberPlate || '-'}<br>
+      <strong>Şirket:</strong> ${data.operatorType || '-'}<br>
+      <strong>Araç:</strong> ${data.brandName || '-'} ${data.modelYear || '-'}<br>
+      <strong>Tip:</strong> ${data.vehicleType || '-'}<br>
+      <strong>Kapasite:</strong> ${data.fullCapacity || '-'}/${data.seatingCapacity || '-'}<br>
+      <strong>Son güncelleme:</strong> ${lastLoc}
+    `;
         document.getElementById('task-frame').innerHTML = `
-          <iframe src="gorev2.html?arac=${encodeURIComponent(code)}"></iframe>
-        `;
-
+      <iframe src="gorev2.html?arac=${encodeURIComponent(code)}"></iframe>
+    `;
         if (data.latitude && data.longitude) {
           if (!map) {
             map = L.map('map').setView([data.latitude, data.longitude], 15);
@@ -241,7 +215,6 @@
         } else {
           document.getElementById('map').innerHTML = "Konum bilgisi yok.";
         }
-
       } catch (err) {
         console.error(err);
         alert('Veri alınamadı.');
@@ -249,4 +222,5 @@
     });
   </script>
 </body>
+
 </html>
