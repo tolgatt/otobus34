@@ -52,12 +52,26 @@
       background-color: #aa0810;
     }
 
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 15px;
+      align-items: start;
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
     .panel {
       border-radius: 10px;
       background: #fff;
       box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
     }
 
     .panel-header {
@@ -79,44 +93,27 @@
       padding: 12px 15px;
       display: none;
       background: #fff5f5;
-      overflow: auto;
     }
 
     .panel.open .panel-content {
       display: block;
     }
 
-    @media(min-width:768px) {
-      .layout {
-        display: grid;
-        grid-template-columns: 320px 1fr;
-        gap: 15px;
-        align-items: stretch;
-      }
+    #panel-task {
+      flex: 1;
+      min-height: 300px;
+    }
 
-      .left-col {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        height: 100%;
-      }
-
-      #panel-task {
-        display: flex;
-        flex-direction: column;
-      }
-
-      #panel-task .panel-content {
-        flex: 1;
-        overflow: auto;
-      }
+    #panel-task .panel-content {
+      flex: 1;
+      overflow: auto;
     }
 
     #task-frame iframe {
       width: 100%;
       height: 100%;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: none;
     }
 
     #map {
@@ -124,6 +121,18 @@
       height: 300px;
       border-radius: 8px;
       border: 1px solid #ccc;
+    }
+
+    @media(max-width:768px) {
+      .layout {
+        display: block;
+      }
+      .left-col {
+        width: 100%;
+      }
+      #panel-task {
+        min-height: 200px;
+      }
     }
   </style>
 </head>
@@ -174,7 +183,6 @@
   <script>
     let map, marker;
 
-    // Panel açma/kapama
     document.querySelectorAll('.panel-header').forEach(header => {
       header.addEventListener('click', () => {
         const panel = header.parentElement;
@@ -191,13 +199,16 @@
       });
     });
 
-    // Araç sorgulama
     document.getElementById('search-btn').addEventListener('click', async () => {
       const code = document.getElementById('vehicle-code').value.trim();
-      if (!code) { alert('Araç kodu giriniz.'); return; }
-
+      if (!code) {
+        alert('Araç kodu giriniz.');
+        return;
+      }
       try {
-        const res = await fetch(`https://arac.iett.gov.tr/api/task/bus-fleet/buses/${code}`, { method: 'POST' });
+        const res = await fetch(`https://arac.iett.gov.tr/api/task/bus-fleet/buses/${code}`, {
+          method: 'POST'
+        });
         if (!res.ok) throw new Error("API hatası");
         const data = await res.json();
         const lastLoc = data.lastLocationDate && data.lastLocationTime ? `${data.lastLocationDate} ${data.lastLocationTime}` : '-';
@@ -218,7 +229,9 @@
         if (data.latitude && data.longitude) {
           if (!map) {
             map = L.map('map').setView([data.latitude, data.longitude], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19
+            }).addTo(map);
             marker = L.marker([data.latitude, data.longitude]).addTo(map);
           } else {
             map.setView([data.latitude, data.longitude], 15);
@@ -229,26 +242,11 @@
           document.getElementById('map').innerHTML = "Konum bilgisi yok.";
         }
 
-        // Görev paneli yüksekliği eşitle
-        setTimeout(setTaskPanelHeight, 100);
-
       } catch (err) {
         console.error(err);
         alert('Veri alınamadı.');
       }
     });
-
-    // Panel yüksekliğini eşitle
-    function setTaskPanelHeight() {
-      const leftCol = document.querySelector('.left-col');
-      const taskPanel = document.getElementById('panel-task');
-      if(leftCol && taskPanel){
-        taskPanel.style.height = leftCol.offsetHeight + 'px';
-      }
-    }
-
-    window.addEventListener('load', setTaskPanelHeight);
-    window.addEventListener('resize', setTaskPanelHeight);
   </script>
 </body>
 </html>
